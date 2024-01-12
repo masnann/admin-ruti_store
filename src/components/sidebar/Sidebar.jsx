@@ -8,6 +8,7 @@ import {
   HiShoppingCart,
   HiPencil,
   HiChartBar,
+  HiLogout,
 } from "react-icons/hi";
 
 const SidebarContext = createContext();
@@ -58,8 +59,13 @@ export default function Sidebar({ children }) {
               text="Blog Posts"
               link="/blog-posts"
             />
-
             {children}
+          </ul>
+        </SidebarContext.Provider>
+
+        <SidebarContext.Provider value={{ expanded }}>
+          <ul className="flex-1 px-3">
+            <SidebarItem icon={<HiLogout />} text="Logout" link="/logout" />
           </ul>
         </SidebarContext.Provider>
       </nav>
@@ -97,7 +103,7 @@ export function SidebarItem({ icon, text, link }) {
       >
         {text}
       </span>
-    
+
       {!expanded && (
         <div
           className={`

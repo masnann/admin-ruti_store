@@ -1,1 +1,1 @@
-export const BASE_URL = 'https://api.disappear-organization.my.id';
+export const BASE_URL = 'https://backend-rutistore-f3d3cba4863c.herokuapp.com';
