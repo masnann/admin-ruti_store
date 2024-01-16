@@ -6,8 +6,11 @@ import Login from "./pages/login/LoginPage";
 import ProductPage from "./pages/product/ProductPage";
 import OrderPage from "./pages/order/OrderPage";
 import PaymentPage from "./pages/payment/PaymentPage";
-import BlogPostPage from "./pages/blogpost/BlogpostPage";
 import AddProductPage from "./pages/product/AddProduct";
+import ArticlePage from "./pages/blogpost/BlogpostPage";
+import AddBlogPostPage from "./pages/blogpost/AddBlogpost";
+import EditBlogPostPage from "./pages/blogpost/EditArticle";
+import ArticleDetailsPage from "./pages/blogpost/DetailBlogpost";
 
 function App() {
   return (
@@ -22,7 +25,10 @@ function App() {
                 <Route path="/products/create" element={<AddProductPage />} />
                 <Route path="/orders" element={<OrderPage />} />
                 <Route path="/payments" element={<PaymentPage />} />
-                <Route path="/blog-posts" element={<BlogPostPage />} />
+                <Route path="/blog-posts" element={<ArticlePage />} />
+                <Route path="/blog-posts/create" element={<AddBlogPostPage />} />
+                <Route path="/blog-posts/edit/:id" element={<EditBlogPostPage />} />
+                <Route path="/blog-posts/details/:id" element={<ArticleDetailsPage />} />
               </Routes>
           </div>
         </Router>
