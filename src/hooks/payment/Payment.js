@@ -1,18 +1,23 @@
-import { useState, useEffect } from 'react';
+// src/hooks/payment/Payment.js
 
-const usePaymentData = (page = 1, pageSize = 10) => {
+import { useState, useEffect } from "react";
+import { BASE_URL } from '../../utils/ApiConfig';
+
+const usePaymentData = (page = 1) => {
+  const pageSize = 2; 
   const [paymentData, setPaymentData] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [totalPages, setTotalPages] = useState(1);
 
   useEffect(() => {
     const fetchPaymentData = async () => {
       try {
-        const token = sessionStorage.getItem('token');
-        const apiUrl = `https://backend-rutistore-f3d3cba4863c.herokuapp.com/api/v1/order/payment/?page=1&page_size=8`;
+        const token = sessionStorage.getItem("token");
+        const apiUrl = `${BASE_URL}/api/v1/order/payment/list?page=${page}&page_size=${pageSize}`;
 
         const response = await fetch(apiUrl, {
-          method: 'GET',
+          method: "GET",
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -23,8 +28,8 @@ const usePaymentData = (page = 1, pageSize = 10) => {
         }
 
         const data = await response.json();
-        console.log('Response headers:', response.headers);
         setPaymentData(data.data);
+        setTotalPages(data.pagination.total_pages);
         setLoading(false);
       } catch (error) {
         setError(error.message);
@@ -33,9 +38,9 @@ const usePaymentData = (page = 1, pageSize = 10) => {
     };
 
     fetchPaymentData();
-  }, [page, pageSize]);
+  }, [page]);
 
-  return { paymentData, loading, error };
+  return { paymentData, loading, error, totalPages };
 };
 
 export default usePaymentData;

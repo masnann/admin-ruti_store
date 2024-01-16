@@ -62,6 +62,9 @@ const DashboardPage = () => {
       <Sidebar />
       <div className="flex-1 overflow-x-hidden overflow-y-auto bg-gray-100 p-4">
         <div className="container mx-auto mt-8">
+        <h1 className="text-3xl font-bold mb-4 text-indigo-800 border-b-2 border-indigo-500 pb-2">
+            Dashboard
+          </h1>
           {/* Section 1: Total Pendapatan, Produk, Pesanan */}
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
             {/* Card Total Pendapatan */}
