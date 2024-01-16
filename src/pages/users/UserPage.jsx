@@ -1,7 +1,7 @@
 // PaymentPage.jsx
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { FaEdit, FaTrash, FaInfoCircle } from 'react-icons/fa';
+import { FaTrash } from 'react-icons/fa';
 import Sidebar from '../../components/sidebar/Sidebar';
 import { Pagination } from '../../components/pagination/Pagination';
 import useUserData from '../../hooks/user/GetAll'; 
@@ -83,18 +83,6 @@ const PaymentPage = () => {
                       <td className="border p-3">{user.phone}</td>
                       <td className="border p-3">{user.name}</td>
                       <td className="border p-3 text-center">
-                        <button
-                          className="mr-2 text-purple-600 hover:text-purple-900"
-                          onClick={() => handleEdit(user.id)}
-                        >
-                          <FaEdit />
-                        </button>
-                        <button
-                          className="mr-2 text-blue-600 hover:text-blue-900"
-                          onClick={() => handleDetails(user.id)}
-                        >
-                          <FaInfoCircle />
-                        </button>
                         <button
                           className="text-red-600 hover:text-red-900"
                           onClick={() => handleDelete(user.id)}
