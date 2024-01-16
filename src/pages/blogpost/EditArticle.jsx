@@ -1,4 +1,3 @@
-// src/pages/EditBlogPostPage.jsx
 import React, { useEffect } from "react";
 import Sidebar from "../../components/sidebar/Sidebar";
 import useEditBlogPost from "../../hooks/article/EditBlogPost";
@@ -14,7 +13,6 @@ const EditBlogPostPage = () => {
     handleChange,
     handleFileChange,
     editBlogPost,
-    fetchBlogPostData, // Function to fetch blog post data
     success,
   } = useEditBlogPost(id);
 
@@ -23,8 +21,8 @@ const EditBlogPostPage = () => {
   };
 
   useEffect(() => {
-    fetchBlogPostData();
-  }, [fetchBlogPostData]);
+    // No need to fetch data here, as it's handled within the useEditBlogPost hook
+  }, []); // Dependency array left empty to ensure it runs only once
 
   useEffect(() => {
     if (success) {
