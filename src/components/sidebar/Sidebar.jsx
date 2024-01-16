@@ -2,13 +2,16 @@ import React, { useContext, createContext, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { ChevronLast, ChevronFirst } from "lucide-react";
 import {
+  HiChartBar,
   HiUserGroup,
   HiCube,
   HiCreditCard,
   HiShoppingCart,
   HiPencil,
-  HiChartBar,
+  HiViewList,
   HiLogout,
+  HiPhotograph,
+  HiStar,
 } from "react-icons/hi";
 
 const SidebarContext = createContext();
@@ -43,6 +46,16 @@ export default function Sidebar({ children }) {
               text="Customers"
               link="/customer"
             />
+            <SidebarItem
+              icon={<HiViewList />}
+              text="Category"
+              link="/category"
+            />
+            <SidebarItem
+              icon={<HiPhotograph />}
+              text="Carousel"
+              link="/carousel"
+            />
             <SidebarItem icon={<HiCube />} text="Products" link="/products" />
             <SidebarItem
               icon={<HiCreditCard />}
@@ -54,11 +67,13 @@ export default function Sidebar({ children }) {
               text="Orders"
               link="/orders"
             />
+            <SidebarItem icon={<HiStar  />} text="Review" link="/review" />
             <SidebarItem
               icon={<HiPencil />}
               text="Blog Posts"
               link="/blog-posts"
             />
+
             {children}
           </ul>
         </SidebarContext.Provider>
@@ -98,7 +113,7 @@ export function SidebarItem({ icon, text, link }) {
       {icon}
       <span
         className={`overflow-hidden transition-all ${
-          expanded ? 'w-52 ml-3' : 'w-0'
+          expanded ? "w-52 ml-3" : "w-0"
         }`}
       >
         {text}

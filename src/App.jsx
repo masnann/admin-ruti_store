@@ -11,6 +11,7 @@ import ArticlePage from "./pages/blogpost/BlogpostPage";
 import AddBlogPostPage from "./pages/blogpost/AddBlogpost";
 import EditBlogPostPage from "./pages/blogpost/EditArticle";
 import ArticleDetailsPage from "./pages/blogpost/DetailBlogpost";
+import CategoryPage from "./pages/category/CategoryPage";
 
 function App() {
   return (
@@ -29,6 +30,7 @@ function App() {
                 <Route path="/blog-posts/create" element={<AddBlogPostPage />} />
                 <Route path="/blog-posts/edit/:id" element={<EditBlogPostPage />} />
                 <Route path="/blog-posts/details/:id" element={<ArticleDetailsPage />} />
+                <Route path="/category" element={<CategoryPage />} />
               </Routes>
           </div>
         </Router>
