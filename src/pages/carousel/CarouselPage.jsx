@@ -105,12 +105,6 @@ const CarouselPage = () => {
                           <FaEdit />
                         </button>
                         <button
-                          className="mr-2 text-blue-600 hover:text-blue-900"
-                          onClick={() => handleDetails(carousel.id)}
-                        >
-                          <FaInfoCircle />
-                        </button>
-                        <button
                           className="text-red-600 hover:text-red-900"
                           onClick={() => handleDelete(carousel.id)}
                         >

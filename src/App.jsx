@@ -15,6 +15,7 @@ import CategoryPage from "./pages/category/CategoryPage";
 import EditCategoryPage from "./pages/category/EditCategoryPage";
 import AddCategoryPage from "./pages/category/AddCategoryPage";
 import CarouselPage from "./pages/carousel/CarouselPage";
+import AddCarouselPage from "./pages/carousel/AddCarouselPage";
 
 function App() {
   return (
@@ -37,8 +38,8 @@ function App() {
                 <Route path="/category/create" element={<AddCategoryPage />} />
                 <Route path="/category/edit/:id" element={<EditCategoryPage />} />
                 <Route path="/carousel" element={<CarouselPage />} />
-                {/* <Route path="/category/create" element={<AddCategoryPage />} />
-                <Route path="/category/edit/:id" element={<EditCategoryPage />} /> */}
+                <Route path="/carousel/create" element={<AddCarouselPage />} /> 
+                {/* <Route path="/category/edit/:id" element={<EditCategoryPage />} />  */}
               </Routes>
           </div>
         </Router>
