@@ -19,7 +19,7 @@ const CarouselPage = () => {
     }
   }, [token, navigate]);
 
-  const { carouselData, loading, error, totalPages, itemsPerPage } =
+  const { carouselData, loading, error, totalPages } =
     useCarouselData(currentPage, token);
 
   const { deleteCarousel, resetDeleteState } = useDeleteCarousel();
