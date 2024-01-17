@@ -5,6 +5,8 @@ import { FaEdit, FaTrash, FaInfoCircle, FaPlus } from "react-icons/fa";
 import Sidebar from "../../components/sidebar/Sidebar";
 import { Pagination } from "../../components/pagination/Pagination";
 import useCarouselData from "../../hooks/home/GetAllCarousel";
+import useDeleteCarousel from "../../hooks/home/DeleteCaousel";
+import DeleteConfirmationModal from "../../components/modals/Delete";
 
 const CarouselPage = () => {
   const [currentPage, setCurrentPage] = useState(1);
@@ -17,25 +19,41 @@ const CarouselPage = () => {
     }
   }, [token, navigate]);
 
-  const { carouselData, loading, error, totalPages, itemsPerPage } = useCarouselData(
-    currentPage,
-    token
-  );
+  const { carouselData, loading, error, totalPages, itemsPerPage } =
+    useCarouselData(currentPage, token);
+
+  const { deleteCarousel, resetDeleteState } = useDeleteCarousel();
+
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const [carouselToDelete, setCarouselToDelete] = useState(null);
 
   const handlePageChange = (page) => {
     setCurrentPage(page);
   };
 
   const handleEdit = (id) => {
-    console.log(`Edit button clicked for ID ${id}`);
+    navigate(`/carousel/edit/${id}`);
   };
 
   const handleDelete = (id) => {
-    console.log(`Delete button clicked for ID ${id}`);
+    setCarouselToDelete(id);
+    setShowDeleteModal(true);
   };
 
-  const handleDetails = (id) => {
-    console.log(`Details button clicked for ID ${id}`);
+  const handleConfirmDelete = async () => {
+    await deleteCarousel(carouselToDelete);
+    resetDeleteState(); // Reset delete state after handling
+
+    // Close the modal after handling delete
+    setShowDeleteModal(false);
+
+    window.location.reload();
+  };
+
+  const handleCancelDelete = () => {
+    // Reset state and close the modal
+    setCarouselToDelete(null);
+    setShowDeleteModal(false);
   };
 
   const handleAddCarousel = () => {
@@ -64,9 +82,15 @@ const CarouselPage = () => {
             <table className="min-w-full bg-white border border-gray-300 mt-4">
               <thead>
                 <tr>
-                  <th className="border p-3 bg-gray-300 text-gray-700">Title</th>
-                  <th className="border p-3 bg-gray-300 text-gray-700">Image URL</th>
-                  <th className="border p-3 bg-gray-300 text-gray-700">Actions</th>
+                  <th className="border p-3 bg-gray-300 text-gray-700">
+                    Title
+                  </th>
+                  <th className="border p-3 bg-gray-300 text-gray-700">
+                    Image URL
+                  </th>
+                  <th className="border p-3 bg-gray-300 text-gray-700">
+                    Actions
+                  </th>
                 </tr>
               </thead>
               <tbody>
@@ -128,6 +152,12 @@ const CarouselPage = () => {
           </div>
         </div>
       </div>
+      {/* Modal for Delete Confirmation */}
+      <DeleteConfirmationModal
+        isOpen={showDeleteModal}
+        onCancel={handleCancelDelete}
+        onConfirm={handleConfirmDelete}
+      />
     </div>
   );
 };

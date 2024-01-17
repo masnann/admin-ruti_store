@@ -16,33 +16,38 @@ import EditCategoryPage from "./pages/category/EditCategoryPage";
 import AddCategoryPage from "./pages/category/AddCategoryPage";
 import CarouselPage from "./pages/carousel/CarouselPage";
 import AddCarouselPage from "./pages/carousel/AddCarouselPage";
+import EditCarouselPage from "./pages/carousel/EditCarouselPage";
+
 
 function App() {
   return (
     <div className="flex flex-col min-h-screen">
-        <Router>
-            <div className="flex-grow">
-              <Routes>
-                <Route path="/customer" element={<UserPage />} />
-                <Route path="/login" element={<Login />} />
-                <Route path="/" element={<DashboardPage />} />
-                <Route path="/products" element={<ProductPage />} />
-                <Route path="/products/create" element={<AddProductPage />} />
-                <Route path="/orders" element={<OrderPage />} />
-                <Route path="/payments" element={<PaymentPage />} />
-                <Route path="/blog-posts" element={<ArticlePage />} />
-                <Route path="/blog-posts/create" element={<AddBlogPostPage />} />
-                <Route path="/blog-posts/edit/:id" element={<EditBlogPostPage />} />
-                <Route path="/blog-posts/details/:id" element={<ArticleDetailsPage />} />
-                <Route path="/category" element={<CategoryPage />} />
-                <Route path="/category/create" element={<AddCategoryPage />} />
-                <Route path="/category/edit/:id" element={<EditCategoryPage />} />
-                <Route path="/carousel" element={<CarouselPage />} />
-                <Route path="/carousel/create" element={<AddCarouselPage />} /> 
-                {/* <Route path="/category/edit/:id" element={<EditCategoryPage />} />  */}
-              </Routes>
-          </div>
-        </Router>
+      <Router>
+        <div className="flex-grow">
+          <Routes>
+            <Route path="/customer" element={<UserPage />} />
+            <Route path="/login" element={<Login />} />
+            <Route path="/" element={<DashboardPage />} />
+            <Route path="/products" element={<ProductPage />} />
+            <Route path="/products/create" element={<AddProductPage />} />
+            <Route path="/orders" element={<OrderPage />} />
+            <Route path="/payments" element={<PaymentPage />} />
+            <Route path="/blog-posts" element={<ArticlePage />} />
+            <Route path="/blog-posts/create" element={<AddBlogPostPage />} />
+            <Route path="/blog-posts/edit/:id" element={<EditBlogPostPage />} />
+            <Route
+              path="/blog-posts/details/:id"
+              element={<ArticleDetailsPage />}
+            />
+            <Route path="/category" element={<CategoryPage />} />
+            <Route path="/category/create" element={<AddCategoryPage />} />
+            <Route path="/category/edit/:id" element={<EditCategoryPage />} />
+            <Route path="/carousel" element={<CarouselPage />} />
+            <Route path="/carousel/create" element={<AddCarouselPage />} />
+            <Route path="/carousel/edit/:id" element={<EditCarouselPage />} />
+          </Routes>
+        </div>
+      </Router>
     </div>
   );
 }
