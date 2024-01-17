@@ -60,12 +60,9 @@ const CategoryPage = () => {
     setShowDeleteModal(false);
   };
 
-  const handleDetails = (id) => {
-    console.log("View details for category with id:", id);
-  };
 
   const handleAddCategory = () => {
-    console.log("Add new category");
+    navigate(`/category/create`);
   };
 
   return (
