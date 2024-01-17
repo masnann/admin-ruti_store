@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import Sidebar from "../../components/sidebar/Sidebar";
-import useEditBlogPost from "../../hooks/article/EditBlogPost";
+import useEditBlogPost from "../../hooks/article/EditBlogpost";
 import LoadingModal from "../../components/modals/Loading";
 import { useParams, useNavigate } from "react-router-dom";
 

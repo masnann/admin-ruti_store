@@ -1,31 +1,31 @@
 import { useState, useEffect } from "react";
 import { BASE_URL } from "../../utils/ApiConfig";
 
-const useCarouselData = (page = 1) => {
+const useReviews = (page = 1) => {
   const pageSize = 10;
-  const [carouselData, setCarouselData] = useState([]);
+  const [reviews, setReviews] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [totalPages, setTotalPages] = useState(1);
 
   useEffect(() => {
-    const fetchCarouselData = async () => {
+    const fetchReviews = async () => {
       try {
         const token = sessionStorage.getItem("token");
-        const apiUrl = `${BASE_URL}/api/v1/home/carousel/list?page=${page}&page_size=${pageSize}`;
+        const apiUrl = `${BASE_URL}/api/v1/product/reviews/?page=${page}&page_size=${pageSize}`;
         const response = await fetch(apiUrl, {
-            method: "GET",
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          });
+          method: "GET",
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
 
         if (!response.ok) {
           throw new Error(`HTTP error! Status: ${response.status}`);
         }
 
         const data = await response.json();
-        setCarouselData(data.data);
+        setReviews(data.data);
         setTotalPages(data.pagination.total_pages);
         setLoading(false);
       } catch (error) {
@@ -34,10 +34,10 @@ const useCarouselData = (page = 1) => {
       }
     };
 
-    fetchCarouselData();
+    fetchReviews();
   }, [page, pageSize]);
 
-  return { carouselData, loading, error, totalPages , itemsPerPage: pageSize};
+  return { reviews, loading, error, totalPages, itemsPerPage: pageSize };
 };
 
-export default useCarouselData;
+export default useReviews;
