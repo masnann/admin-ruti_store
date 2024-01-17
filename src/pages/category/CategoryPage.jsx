@@ -36,7 +36,7 @@ const CategoryPage = () => {
   };
 
   const handleEdit = (id) => {
-    console.log("Edit category with id:", id);
+    navigate(`/category/edit/${id}`);
   };
 
   const handleDelete = (id) => {
@@ -144,12 +144,12 @@ const CategoryPage = () => {
                         >
                           <FaEdit />
                         </button>
-                        <button
+                        {/* <button
                           className="mr-2 text-blue-600 hover:text-blue-900"
                           onClick={() => handleDetails(category.id)}
                         >
                           <FaInfoCircle />
-                        </button>
+                        </button> */}
                         <button
                           className="text-red-600 hover:text-red-900"
                           onClick={() => handleDelete(category.id)}
