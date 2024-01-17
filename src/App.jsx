@@ -18,6 +18,7 @@ import CarouselPage from "./pages/carousel/CarouselPage";
 import AddCarouselPage from "./pages/carousel/AddCarouselPage";
 import EditCarouselPage from "./pages/carousel/EditCarouselPage";
 import ReviewsPage from "./pages/review/ReviewPage";
+import ProductReviewsPage from "./pages/review/DetailsReview";
 
 
 function App() {
@@ -48,6 +49,7 @@ function App() {
             <Route path="/carousel/edit/:id" element={<EditCarouselPage />} />
 
             <Route path="/review" element={<ReviewsPage />} />
+            <Route path="/review/detail/:id" element={<ProductReviewsPage />} />
           </Routes>
         </div>
       </Router>

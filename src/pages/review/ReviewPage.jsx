@@ -5,7 +5,6 @@ import Sidebar from "../../components/sidebar/Sidebar";
 import { Pagination } from "../../components/pagination/Pagination";
 import useReviews from "../../hooks/review/GetAll";
 
-
 const ReviewsPage = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const token = sessionStorage.getItem("token");
@@ -17,19 +16,17 @@ const ReviewsPage = () => {
     }
   }, [token, navigate]);
 
-  const { reviews, loading, error, totalPages } = useReviews(
-    currentPage,
-    token
-  );
+  const { reviews, loading, error, totalPages } = useReviews(currentPage, token);
 
   const handlePageChange = (page) => {
     setCurrentPage(page);
   };
 
-  const handleDetail = () => {
-    console.log("cek logic detail")
+  const handleDetail = (id) => {
+    // Navigasi ke halaman product reviews dengan menggunakan product_id
+    navigate(`/review/detail/${id}`);
   };
- 
+
   return (
     <div className="flex h-screen bg-gray-100">
       <Sidebar />
@@ -53,7 +50,6 @@ const ReviewsPage = () => {
                   <th className="border p-3 bg-gray-300 text-gray-700">
                     Total Review
                   </th>
-                  {/* Additional header fields as needed */}
                   <th className="border p-3 bg-gray-300 text-gray-700">
                     Actions
                   </th>
@@ -82,14 +78,13 @@ const ReviewsPage = () => {
                       <td className="border p-3 text-center">
                         {review.total_review}
                       </td>
-                      {/* Additional fields as needed */}
                       <td className="border p-3 text-center">
                         <button
                           className="mr-2 text-purple-600 hover:text-purple-900"
                           onClick={() => handleDetail(review.id)}
                         >
                           <FaInfoCircle />
-                        </button>                        
+                        </button>
                       </td>
                     </tr>
                   ))
