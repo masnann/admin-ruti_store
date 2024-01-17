@@ -1,11 +1,14 @@
-import React, { useEffect, useRef } from "react";
+// DashboardPage.jsx
+import React from "react";
 import Sidebar from "../../components/sidebar/Sidebar";
-import Chart from "chart.js/auto";
+import useDashboardData from "../../hooks/home/GetDashboard";
+import DashboardTotalCard from "../../components/dashboard/DashboardTotalCard";
+import DashboardBarChart from "../../components/dashboard/DashboardBarChart";
 
 const DashboardPage = () => {
-  const totalIncome = 1500000;
-  const totalProducts = 50;
-  const totalOrders = 30;
+  const { dashboardData, loading, error } = useDashboardData(
+    sessionStorage.getItem("token")
+  );
 
   const recentTransactions = [
     { id: 1, date: "2024-01-10", customer: "John Doe", status: "Selesai" },
@@ -19,92 +22,33 @@ const DashboardPage = () => {
     { week: "Week 4", total: 50 },
   ];
 
-  const chartRef = useRef(null);
-  const chartInstance = useRef(null);
-
-  useEffect(() => {
-    const ctx = chartRef.current.getContext("2d");
-    const labels = ordersPerWeek.map((week) => week.week);
-    const data = ordersPerWeek.map((week) => week.total);
-
-    // Hancurkan chart sebelum membuat yang baru
-    if (chartInstance.current) {
-      chartInstance.current.destroy();
-    }
-
-    // Buat chart baru
-    chartInstance.current = new Chart(ctx, {
-      type: "bar",
-      data: {
-        labels: labels,
-        datasets: [
-          {
-            label: "Pesanan per Minggu",
-            data: data,
-            backgroundColor: "rgba(75, 192, 192, 0.2)",
-            borderColor: "rgba(75, 192, 192, 1)",
-            borderWidth: 1,
-          },
-        ],
-      },
-      options: {
-        scales: {
-          y: {
-            beginAtZero: true,
-          },
-        },
-      },
-    });
-  }, [ordersPerWeek]);
-
   return (
     <div className="flex h-screen bg-gray-100">
       <Sidebar />
       <div className="flex-1 overflow-x-hidden overflow-y-auto bg-gray-100 p-4">
         <div className="container mx-auto mt-8">
-        <h1 className="text-3xl font-bold mb-4 text-indigo-800 border-b-2 border-indigo-500 pb-2">
+          <h1 className="text-3xl font-bold mb-4 text-indigo-800 border-b-2 border-indigo-500 pb-2">
             Dashboard
           </h1>
-          {/* Section 1: Total Pendapatan, Produk, Pesanan */}
+
+          {/* Section 1: Total Pendapatan, Produk, Pengguna */}
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-            {/* Card Total Pendapatan */}
-            <div className="bg-white p-6 rounded-lg shadow-md">
-              <h2 className="text-lg font-semibold text-gray-800 mb-2">
-                Total Pendapatan
-              </h2>
-              <p className="text-2xl text-indigo-800 font-bold">
-                Rp {totalIncome.toLocaleString()}
-              </p>
-            </div>
-
-            {/* Card Total Produk */}
-            <div className="bg-white p-6 rounded-lg shadow-md">
-              <h2 className="text-lg font-semibold text-gray-800 mb-2">
-                Total Produk
-              </h2>
-              <p className="text-2xl text-indigo-800 font-bold">
-                {totalProducts}
-              </p>
-            </div>
-
-            {/* Card Total Pesanan */}
-            <div className="bg-white p-6 rounded-lg shadow-md">
-              <h2 className="text-lg font-semibold text-gray-800 mb-2">
-                Total Pesanan
-              </h2>
-              <p className="text-2xl text-indigo-800 font-bold">
-                {totalOrders}
-              </p>
-            </div>
+            <DashboardTotalCard
+              title="Total Pendapatan"
+              value={`Rp ${dashboardData?.data?.total_income}`}
+            />
+            <DashboardTotalCard
+              title="Total Produk"
+              value={dashboardData?.data?.total_product}
+            />
+            <DashboardTotalCard
+              title="Total Pengguna"
+              value={dashboardData?.data?.total_user}
+            />
           </div>
 
           {/* Section 2: Grafik Pesanan Per Minggu */}
-          <div className="bg-white p-6 rounded-lg shadow-md mt-4">
-            <h2 className="text-lg font-semibold text-gray-800 mb-2">
-              Pesanan Per Minggu
-            </h2>
-            <canvas ref={chartRef}></canvas>
-          </div>
+          <DashboardBarChart data={ordersPerWeek} />
 
           {/* Section 3: Transaksi Terakhir */}
           <div className="bg-white p-6 rounded-lg shadow-md mt-4">
