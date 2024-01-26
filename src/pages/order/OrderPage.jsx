@@ -1,28 +1,43 @@
 // PaymentPage.jsx
-import React, { useState, useEffect  } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { FaEdit, FaTrash, FaInfoCircle } from 'react-icons/fa';
-import Sidebar from '../../components/sidebar/Sidebar';
-import { Pagination } from '../../components/pagination/Pagination';
-import useOrderData from '../../hooks/order/Order';
+import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import { FaEdit, FaTrash, FaInfoCircle } from "react-icons/fa";
+import Sidebar from "../../components/sidebar/Sidebar";
+import { Pagination } from "../../components/pagination/Pagination";
+import getOrderList from "../../hooks/order/GetOrderApi";
 
 const OrderPage = () => {
   const [currentPage, setCurrentPage] = useState(1);
-  const itemsPerPage = 2;
-  const token = sessionStorage.getItem('token');
-  const navigate = useNavigate();  
+  const [totalPages, setTotalPages] = useState(1);
+  const [orderData, setOrderData] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+  const [searchTerm, setSearchTerm] = useState("");
+
+  const token = sessionStorage.getItem("token");
+  const navigate = useNavigate();
 
   useEffect(() => {
     if (!token) {
-      navigate('/login');
+      navigate("/login");
+    } else {
+      fetchData();
     }
-  }, [token, navigate]);
+  }, [token, navigate, currentPage, searchTerm]);
 
-  const { orderData, loading, error, totalPages } = useOrderData(
-    currentPage,
-    itemsPerPage,
-    token
-  );
+  const fetchData = async () => {
+    try {
+      setLoading(true);
+      const response = await getOrderList(currentPage, 10, searchTerm);
+      setOrderData(response.data);
+      setTotalPages(response.pagination.total_pages);
+      setLoading(false);
+    } catch (error) {
+      console.error("Error fetching order list:", error);
+      setError(error.message || "An error occurred");
+      setLoading(false);
+    }
+  };
 
   const handlePageChange = (page) => {
     setCurrentPage(page);
@@ -43,6 +58,10 @@ const OrderPage = () => {
     console.log(`Details button clicked for ID ${id}`);
   };
 
+  const handleSearchChange = (e) => {
+    setSearchTerm(e.target.value);
+  };
+
   return (
     <div className="flex h-screen bg-gray-100">
       <Sidebar />
@@ -51,18 +70,35 @@ const OrderPage = () => {
           <h1 className="text-3xl font-bold mb-4 text-indigo-800 border-b-2 border-indigo-500 pb-2">
             Orders
           </h1>
+          <div className="flex justify-end">
+            <input
+              type="text"
+              placeholder="Pencarian"
+              className="border px-4 py-2 rounded-md"
+              value={searchTerm}
+              onChange={handleSearchChange}
+            />
+          </div>
 
           {/* Display Orders Table */}
           <div className="overflow-x-auto">
-            <table className="min-w-full bg-white border border-gray-300 mt-8">
+            <table className="min-w-full bg-white border border-gray-300 mt-4">
               <thead>
                 <tr>
                   <th className="border p-3 bg-gray-300 text-gray-700">ID</th>
-                  <th className="border p-3 bg-gray-300 text-gray-700">Customer</th>
-                  <th className="border p-3 bg-gray-300 text-gray-700">Amount</th>
+                  <th className="border p-3 bg-gray-300 text-gray-700">
+                    Customer
+                  </th>
+                  <th className="border p-3 bg-gray-300 text-gray-700">
+                    Amount
+                  </th>
                   <th className="border p-3 bg-gray-300 text-gray-700">Date</th>
-                  <th className="border p-3 bg-gray-300 text-gray-700">Order Status</th>
-                  <th className="border p-3 bg-gray-300 text-gray-700">Actions</th>
+                  <th className="border p-3 bg-gray-300 text-gray-700">
+                    Order Status
+                  </th>
+                  <th className="border p-3 bg-gray-300 text-gray-700">
+                    Actions
+                  </th>
                 </tr>
               </thead>
               <tbody>
@@ -83,9 +119,19 @@ const OrderPage = () => {
                     <tr key={order.id_order} className="hover:bg-gray-100">
                       <td className="border p-3">{order.id_order}</td>
                       <td className="border p-3">{order.name}</td>
-                      <td className="border p-3">Rp. {order.total_amount_paid}</td>
                       <td className="border p-3">
-                        {new Date(order.date).toLocaleString()}
+                        Rp. {order.total_amount_paid}
+                      </td>
+                      <td className="border p-3">
+                        {new Intl.DateTimeFormat("en-US", {
+                          year: "numeric",
+                          month: "numeric",
+                          day: "numeric",
+                          hour: "numeric",
+                          minute: "numeric",
+                          second: "numeric",
+                          timeZone: "UTC",
+                        }).format(new Date(order.date))}
                       </td>
                       <td className="border p-3">{order.order_status}</td>
                       <td className="border p-3 text-center">
