@@ -1,1 +1,1 @@
-export const BASE_URL = 'https://backend-rutistore-f3d3cba4863c.herokuapp.com';
+export const BASE_URL = 'http://localhost:8000';
