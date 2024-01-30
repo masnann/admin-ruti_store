@@ -12,7 +12,7 @@ const PaymentPage = () => {
   const [paymentData, setPaymentData] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [searchTerm, setSearchTerm] = useState(""); // Tambahkan state untuk pencarian
+  const [searchTerm, setSearchTerm] = useState("");
 
   const token = sessionStorage.getItem("token");
   const navigate = useNavigate();
@@ -23,7 +23,7 @@ const PaymentPage = () => {
     } else {
       fetchData();
     }
-  }, [token, navigate, currentPage, searchTerm]); // Tambahkan searchTerm ke dalam dependencies useEffect
+  }, [token, navigate, currentPage, searchTerm]);
 
   const fetchData = async () => {
     try {
@@ -113,7 +113,15 @@ const PaymentPage = () => {
                         Rp. {payment.total_amount_paid}
                       </td>
                       <td className="border p-3">
-                        {new Date(payment.date).toLocaleString()}
+                        {new Intl.DateTimeFormat("en-US", {
+                          year: "numeric",
+                          month: "numeric",
+                          day: "numeric",
+                          hour: "numeric",
+                          minute: "numeric",
+                          second: "numeric",
+                          timeZone: "UTC",
+                        }).format(new Date(payment.date))}
                       </td>
                       <td className="border p-3">{payment.payment_status}</td>
                       <td className="border p-3">
