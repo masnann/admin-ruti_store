@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { BASE_URL } from '../../utils/ApiConfig';
 
-const getDashboardData = async () => {
+const getLatestOrders = async (page = 1, pageSize = 10) => {
   try {
     const token = sessionStorage.getItem('token');
 
@@ -12,14 +12,14 @@ const getDashboardData = async () => {
     const headers = {
       Authorization: `Bearer ${token}`,
     };
-
-    const response = await axios.get(`${BASE_URL}/api/v1/home/dashboard`, {
-      headers,
-    });
-
+    const response = await axios.get(
+      `${BASE_URL}/api/v1/home/latest-order?page=${page}&page_size=${pageSize}`, {
+        headers,
+      }
+    );
     return response.data;
   } catch (error) {
-    console.error('Error fetching dashboard data:', error);
+    console.error('Error fetching latest orders:', error);
     if (error.response) {
       throw new Error(error.response.data.message || 'An error occurred');
     } else if (error.request) {
@@ -30,4 +30,4 @@ const getDashboardData = async () => {
   }
 };
 
-export default getDashboardData;
+export default getLatestOrders;

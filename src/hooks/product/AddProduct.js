@@ -8,6 +8,8 @@ const useProductForm = () => {
     description: "",
     discount: 0,
     stock: 0,
+    size: "",
+    weight: 0,
     category_id: [1],
   };
 
@@ -20,7 +22,7 @@ const useProductForm = () => {
 
   const handleChange = (name, value) => {
     // Konversi nilai menjadi number jika name adalah price, discount, atau stock
-    const numericValue = ["price", "discount", "stock"].includes(name)
+    const numericValue = ["price", "discount", "stock", "weight"].includes(name)
       ? parseInt(value, 10)
       : value;
 

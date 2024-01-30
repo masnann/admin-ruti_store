@@ -24,7 +24,7 @@ export default function Sidebar({ children }) {
       <nav className="h-full inline-flex flex-col bg-white border-r shadow-sm">
         <div className="p-4 pb-2 flex justify-between items-center">
           <img
-            src="https://img.logoipsum.com/243.svg"
+            src="https://res.cloudinary.com/dufa4bel6/image/upload/v1706312426/disappear/admin-logo_ip6ijw.png"
             className={`overflow-hidden transition-all ${
               expanded ? "w-32" : "w-0"
             }`}
