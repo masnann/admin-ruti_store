@@ -118,7 +118,7 @@ const AddProductPage = () => {
               />
             </div>
 
-            {/* <div className="mb-4">
+            <div className="mb-4">
               <label
                 htmlFor="weight"
                 className="block text-sm font-bold text-gray-600"
@@ -134,7 +134,25 @@ const AddProductPage = () => {
                 value={formData.weight}
                 onChange={(e) => handleChange("weight", e.target.value)}
               />
-            </div> */}
+            </div>
+
+            <div className="mb-4">
+              <label
+                htmlFor="size"
+                className="block text-sm font-bold text-gray-600"
+              >
+                Size
+              </label>
+              <input
+                type="text"
+                name="size"
+                id="size"
+                className="mt-1 p-2 w-full border rounded-md bg-gray-100"
+                placeholder="Masukkan ukuran produk"
+                value={formData.size}
+                onChange={(e) => handleChange("size", e.target.value)}
+              />
+            </div>
 
             <div>
               <label

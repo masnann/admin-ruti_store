@@ -1,9 +1,8 @@
-// Pagination.jsx
 import React from 'react';
 
 export function Pagination({ totalPages, currentPage, onChangePage }) {
   const getItemProps = (index) => ({
-    className: `px-4 py-2 rounded focus:outline-none ${
+    className: `px-3 py-2 rounded focus:outline-none ${
       currentPage === index
         ? 'bg-gray-500 text-white'
         : 'bg-gray-200 hover:bg-gray-300 text-gray-700'
@@ -24,10 +23,10 @@ export function Pagination({ totalPages, currentPage, onChangePage }) {
   };
 
   return (
-    <div className="flex justify-end mt-4">
+    <div className="flex flex-col sm:flex-row items-center justify-center sm:justify-end mt-4">
       <div className="flex items-center gap-2">
         <button
-          className={`px-4 py-2 rounded focus:outline-none ${
+          className={`px-3 py-2 rounded focus:outline-none ${
             currentPage === 1
               ? 'bg-gray-300 text-gray-700'
               : 'bg-gray-200 hover:bg-gray-300 text-gray-700'
@@ -35,7 +34,7 @@ export function Pagination({ totalPages, currentPage, onChangePage }) {
           onClick={prev}
           disabled={currentPage === 1}
         >
-          Previous
+          Kembali
         </button>
         {[...Array(totalPages).keys()].map((index) => (
           <button key={index + 1} {...getItemProps(index + 1)}>
@@ -43,7 +42,7 @@ export function Pagination({ totalPages, currentPage, onChangePage }) {
           </button>
         ))}
         <button
-          className={`px-4 py-2 rounded focus:outline-none ${
+          className={`px-3 py-2 rounded focus:outline-none ${
             currentPage === totalPages
               ? 'bg-gray-300 text-gray-700'
               : 'bg-gray-200 hover:bg-gray-300 text-gray-700'
@@ -51,7 +50,7 @@ export function Pagination({ totalPages, currentPage, onChangePage }) {
           onClick={next}
           disabled={currentPage === totalPages}
         >
-          Next
+          Selanjutnya
         </button>
       </div>
     </div>

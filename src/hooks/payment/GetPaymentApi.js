@@ -1,25 +1,26 @@
 import axios from 'axios';
 import { BASE_URL } from '../../utils/ApiConfig';
 
-const getDashboardData = async () => {
+const getPaymentList = async (page = 1, pageSize = 10, search = "") => {
   try {
     const token = sessionStorage.getItem('token');
 
     if (!token) {
-      throw new Error('Token not found. Redirecting to login.');
+      throw new Error('Token not found');
     }
 
     const headers = {
       Authorization: `Bearer ${token}`,
     };
 
-    const response = await axios.get(`${BASE_URL}/api/v1/home/dashboard`, {
-      headers,
-    });
+    const response = await axios.get(
+      `${BASE_URL}/api/v1/order/payment/list?page=${page}&page_size=${pageSize}&search=${search}`,
+      { headers }
+    );
 
     return response.data;
   } catch (error) {
-    console.error('Error fetching dashboard data:', error);
+    console.error('Error fetching payment list:', error);
     if (error.response) {
       throw new Error(error.response.data.message || 'An error occurred');
     } else if (error.request) {
@@ -30,4 +31,4 @@ const getDashboardData = async () => {
   }
 };
 
-export default getDashboardData;
+export default getPaymentList;
