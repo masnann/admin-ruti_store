@@ -1,39 +1,81 @@
-// ProductPage.jsx
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { FaEdit, FaTrash, FaInfoCircle, FaPlus } from "react-icons/fa";
 import Sidebar from "../../components/sidebar/Sidebar";
 import { Pagination } from "../../components/pagination/Pagination";
-import useProductData from "../../hooks/product/GetAll";
+import getProductList from "../../hooks/product/GetAll";
+import DeleteConfirmationModal from "../../components/modals/Delete";
+import deleteProduct from "../../hooks/product/DeleteProductApi";
 
 const ProductPage = () => {
   const [currentPage, setCurrentPage] = useState(1);
-  const itemsPerPage = 2;
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
+  const [productData, setProducts] = useState([]);
+  const [totalPages, setTotalPages] = useState(0);
+  const [deleteProductId, setDeleteProductId] = useState(null);
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+
   const token = sessionStorage.getItem("token");
   const navigate = useNavigate();
 
   useEffect(() => {
     if (!token) {
       navigate("/login");
+    } else {
+      fetchData();
     }
-  }, [token, navigate]);
+  }, [token, navigate, currentPage]);
 
-  const { productData, loading, error, totalPages } = useProductData(
-    currentPage,
-    itemsPerPage,
-    token
-  );
+  const fetchData = async () => {
+    try {
+      setLoading(true);
+
+      const response = await getProductList(currentPage, 10);
+      setProducts(response.data);
+      setTotalPages(response.pagination.total_pages);
+      setLoading(false);
+    } catch (error) {
+      setError(error.message);
+      setLoading(false);
+      console.error("Error fetching product list:", error.message);
+    }
+  };
 
   const handlePageChange = (page) => {
     setCurrentPage(page);
   };
 
   const handleEdit = (id) => {
-    console.log(`Edit button clicked for ID ${id}`);
+    navigate(`/products/detail/${id}`);
   };
 
   const handleDelete = (id) => {
-    console.log(`Delete button clicked for ID ${id}`);
+    setDeleteProductId(id);
+    setIsDeleteModalOpen(true);
+  };
+
+  const handleDeleteConfirmation = async () => {
+    try {
+      setLoading(true);
+
+      // Call the deleteProduct function to delete the product
+      await deleteProduct(deleteProductId);
+
+      // After successful deletion, fetch the updated product list
+      await fetchData();
+
+      setLoading(false);
+      setIsDeleteModalOpen(false);
+    } catch (error) {
+      setError(error.message);
+      setLoading(false);
+      console.error("Error deleting product:", error.message);
+    }
+  };
+
+  const handleDeleteCancel = () => {
+    setIsDeleteModalOpen(false);
   };
 
   const handleDetails = (id) => {
@@ -41,54 +83,46 @@ const ProductPage = () => {
   };
 
   const handleAddProduct = () => {
-    navigate("/products/create")
+    navigate("/products/create");
   };
-
   return (
     <div className="flex h-screen bg-gray-100">
       <Sidebar />
       <div className="flex-1 overflow-x-hidden overflow-y-auto bg-gray-100 p-4">
         <div className="container mx-auto mt-8">
           <h1 className="text-3xl font-bold mb-4 text-indigo-800 border-b-2 border-indigo-500 pb-2">
-            Products
+            Produk
           </h1>
-
 
           {/* Display Products Table */}
           <div className="overflow-x-auto mt-2">
-          <button
-            className="px-10 py-2 bg-indigo-500 text-white rounded-md hover:bg-indigo-600 flex items-center"
-            onClick={() => handleAddProduct()}
-          >
-            <FaPlus className="mr-2" />
-            Tambah Produk
-          </button>
+            <button
+              className="px-10 py-2 bg-indigo-500 text-white rounded-md hover:bg-indigo-600 flex items-center"
+              onClick={() => handleAddProduct()}
+            >
+              <FaPlus className="mr-2" />
+              Tambah Produk
+            </button>
 
             <table className="min-w-full bg-white border border-gray-300 mt-4">
               <thead>
                 <tr>
-                  <th className="border p-3 bg-gray-300 text-gray-700">Name</th>
+                  <th className="border p-3 bg-gray-300 text-gray-700">Nama</th>
                   <th className="border p-3 bg-gray-300 text-gray-700">
-                    Price
+                    Harga
                   </th>
                   <th className="border p-3 bg-gray-300 text-gray-700">
                     Rating
                   </th>
                   <th className="border p-3 bg-gray-300 text-gray-700">
-                    Total Reviews
+                    Total Ulasan
                   </th>
+                  <th className="border p-3 bg-gray-300 text-gray-700">Stok</th>
                   <th className="border p-3 bg-gray-300 text-gray-700">
-                    Stock
+                    Dibuat Pada
                   </th>
-                  <th className="border p-3 bg-gray-300 text-gray-700">
-                    Created At
-                  </th>
-                  <th className="border p-3 bg-gray-300 text-gray-700">
-                    Photos
-                  </th>
-                  <th className="border p-3 bg-gray-300 text-gray-700">
-                    Actions
-                  </th>
+                  <th className="border p-3 bg-gray-300 text-gray-700">Foto</th>
+                  <th className="border p-3 bg-gray-300 text-gray-700">Aksi</th>
                 </tr>
               </thead>
               <tbody>
@@ -163,6 +197,12 @@ const ProductPage = () => {
           </div>
         </div>
       </div>
+      <DeleteConfirmationModal
+        isOpen={isDeleteModalOpen}
+        onCancel={handleDeleteCancel}
+        onConfirm={handleDeleteConfirmation}
+      />
+
     </div>
   );
 };

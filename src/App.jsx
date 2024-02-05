@@ -19,6 +19,7 @@ import AddCarouselPage from "./pages/carousel/AddCarouselPage";
 import EditCarouselPage from "./pages/carousel/EditCarouselPage";
 import ReviewsPage from "./pages/review/ReviewPage";
 import ProductReviewsPage from "./pages/review/DetailsReview";
+import EditProductPage from "./pages/product/EditProductPage";
 
 
 function App() {
@@ -32,6 +33,7 @@ function App() {
             <Route path="/" element={<DashboardPage />} />
             <Route path="/products" element={<ProductPage />} />
             <Route path="/products/create" element={<AddProductPage />} />
+            <Route path="/products/detail/:id" element={<EditProductPage />} />
             <Route path="/orders" element={<OrderPage />} />
             <Route path="/payments" element={<PaymentPage />} />
             <Route path="/blog-posts" element={<ArticlePage />} />
