@@ -1,8 +1,7 @@
-// utils/api.js
 import axios from 'axios';
 import { BASE_URL } from '../../utils/ApiConfig';
 
-const getProductList = async (page = 1, pageSize = 10) => {
+const getProductDetails = async (productId) => {
   try {
     const token = sessionStorage.getItem('token');
 
@@ -10,17 +9,15 @@ const getProductList = async (page = 1, pageSize = 10) => {
       throw new Error('Token not found. Redirecting to login.');
     }
 
-    const headers = {
-      Authorization: `Bearer ${token}`,
-    };
-    const response = await axios.get(
-      `${BASE_URL}/api/v1/product/list?page=${page}&page_size=${pageSize}`, {
-        headers,
-      }
-    );
-    return response.data;
+    const response = await axios.get(`${BASE_URL}/api/v1/product/details/${productId}`, {
+      headers: {
+        Authorization: `Bearer ${token}`, 
+      },
+    });
+
+    return response.data.data; 
   } catch (error) {
-    console.error('Error fetching product list:', error);
+    console.error('Error fetching product details:', error);
     if (error.response) {
       throw new Error(error.response.data.message || 'An error occurred');
     } else if (error.request) {
@@ -31,4 +28,4 @@ const getProductList = async (page = 1, pageSize = 10) => {
   }
 };
 
-export default getProductList;
+export default getProductDetails;
