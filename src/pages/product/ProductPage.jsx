@@ -4,6 +4,8 @@ import { FaEdit, FaTrash, FaInfoCircle, FaPlus } from "react-icons/fa";
 import Sidebar from "../../components/sidebar/Sidebar";
 import { Pagination } from "../../components/pagination/Pagination";
 import getProductList from "../../hooks/product/GetAll";
+import DeleteConfirmationModal from "../../components/modals/Delete";
+import deleteProduct from "../../hooks/product/DeleteProductApi";
 
 const ProductPage = () => {
   const [currentPage, setCurrentPage] = useState(1);
@@ -11,6 +13,8 @@ const ProductPage = () => {
   const [error, setError] = useState(null);
   const [productData, setProducts] = useState([]);
   const [totalPages, setTotalPages] = useState(0);
+  const [deleteProductId, setDeleteProductId] = useState(null);
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
 
   const token = sessionStorage.getItem("token");
   const navigate = useNavigate();
@@ -47,7 +51,31 @@ const ProductPage = () => {
   };
 
   const handleDelete = (id) => {
-    console.log(`Delete button clicked for ID ${id}`);
+    setDeleteProductId(id);
+    setIsDeleteModalOpen(true);
+  };
+
+  const handleDeleteConfirmation = async () => {
+    try {
+      setLoading(true);
+
+      // Call the deleteProduct function to delete the product
+      await deleteProduct(deleteProductId);
+
+      // After successful deletion, fetch the updated product list
+      await fetchData();
+
+      setLoading(false);
+      setIsDeleteModalOpen(false);
+    } catch (error) {
+      setError(error.message);
+      setLoading(false);
+      console.error("Error deleting product:", error.message);
+    }
+  };
+
+  const handleDeleteCancel = () => {
+    setIsDeleteModalOpen(false);
   };
 
   const handleDetails = (id) => {
@@ -63,7 +91,7 @@ const ProductPage = () => {
       <div className="flex-1 overflow-x-hidden overflow-y-auto bg-gray-100 p-4">
         <div className="container mx-auto mt-8">
           <h1 className="text-3xl font-bold mb-4 text-indigo-800 border-b-2 border-indigo-500 pb-2">
-            Products
+            Produk
           </h1>
 
           {/* Display Products Table */}
@@ -169,6 +197,12 @@ const ProductPage = () => {
           </div>
         </div>
       </div>
+      <DeleteConfirmationModal
+        isOpen={isDeleteModalOpen}
+        onCancel={handleDeleteCancel}
+        onConfirm={handleDeleteConfirmation}
+      />
+
     </div>
   );
 };
