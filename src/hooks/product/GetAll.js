@@ -1,46 +1,34 @@
-// src/hooks/product/Product.js
-
-import { useState, useEffect } from "react";
+// utils/api.js
+import axios from 'axios';
 import { BASE_URL } from '../../utils/ApiConfig';
 
-const useProductData = (page = 1) => {
-  const pageSize = 10; 
-  const [productData, setProductData] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
-  const [totalPages, setTotalPages] = useState(1);
+const getProductList = async (page = 1, pageSize = 10) => {
+  try {
+    const token = sessionStorage.getItem('token');
 
-  useEffect(() => {
-    const fetchProductData = async () => {
-      try {
-        const token = sessionStorage.getItem("token");
-        const apiUrl = `${BASE_URL}/api/v1/product/list/?page=${page}&page_size=${pageSize}`;
+    if (!token) {
+      throw new Error('Token not found. Redirecting to login.');
+    }
 
-        const response = await fetch(apiUrl, {
-          method: "GET",
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        });
-
-        if (!response.ok) {
-          throw new Error(`HTTP error! Status: ${response.status}`);
-        }
-
-        const data = await response.json();
-        setProductData(data.data);
-        setTotalPages(data.pagination.total_pages);
-        setLoading(false);
-      } catch (error) {
-        setError(error.message);
-        setLoading(false);
-      }
+    const headers = {
+      Authorization: `Bearer ${token}`,
     };
-
-    fetchProductData();
-  }, [page]);
-
-  return { productData, loading, error, totalPages };
+    const response = await axios.get(
+      `${BASE_URL}/api/v1/product/list?page=${page}&page_size=${pageSize}`, {
+        headers,
+      }
+    );
+    return response.data;
+  } catch (error) {
+    console.error('Error fetching product list:', error);
+    if (error.response) {
+      throw new Error(error.response.data.message || 'An error occurred');
+    } else if (error.request) {
+      throw new Error('No response received from the server');
+    } else {
+      throw new Error('An error occurred while setting up the request');
+    }
+  }
 };
 
-export default useProductData;
+export default getProductList;
