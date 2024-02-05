@@ -43,7 +43,7 @@ const ProductPage = () => {
   };
 
   const handleEdit = (id) => {
-    console.log(`Edit button clicked for ID ${id}`);
+    navigate(`/products/detail/${id}`);
   };
 
   const handleDelete = (id) => {
