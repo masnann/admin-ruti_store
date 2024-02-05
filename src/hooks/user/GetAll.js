@@ -3,7 +3,7 @@ import { useState, useEffect } from "react";
 import { BASE_URL } from "../../utils/ApiConfig";
 
 const useUserData = (page = 1) => {
-  const pageSize = 1;
+  const pageSize = 10;
   const [userData, setUserData] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);

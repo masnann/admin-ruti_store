@@ -8,7 +8,7 @@ import useUserData from '../../hooks/user/GetAll';
 
 const PaymentPage = () => {
   const [currentPage, setCurrentPage] = useState(1);
-  const itemsPerPage = 2;
+  const itemsPerPage = 10;
   const token = sessionStorage.getItem('token');
   const navigate = useNavigate();
 

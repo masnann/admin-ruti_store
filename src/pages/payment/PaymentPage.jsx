@@ -86,9 +86,9 @@ const PaymentPage = () => {
                   <th className="border p-3 bg-gray-300 text-gray-700">
                     Payment Status
                   </th>
-                  <th className="border p-3 bg-gray-300 text-gray-700">
+                  {/* <th className="border p-3 bg-gray-300 text-gray-700">
                     Actions
-                  </th>
+                  </th> */}
                 </tr>
               </thead>
               <tbody>
@@ -124,7 +124,7 @@ const PaymentPage = () => {
                         }).format(new Date(payment.date))}
                       </td>
                       <td className="border p-3">{payment.payment_status}</td>
-                      <td className="border p-3">
+                      {/* <td className="border p-3">
                         <button
                           className="mr-2 text-purple-600 hover:text-purple-900"
                           onClick={() => handleEdit(payment.id_order)}
@@ -143,7 +143,7 @@ const PaymentPage = () => {
                         >
                           <FaTrash />
                         </button>
-                      </td>
+                      </td> */}
                     </tr>
                   ))
                 )}

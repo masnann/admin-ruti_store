@@ -4,7 +4,7 @@ import { useState, useEffect } from "react";
 import { BASE_URL } from '../../utils/ApiConfig';
 
 const useProductData = (page = 1) => {
-  const pageSize = 2; 
+  const pageSize = 10; 
   const [productData, setProductData] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
