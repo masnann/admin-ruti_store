@@ -70,7 +70,7 @@ export default function Sidebar({ children }) {
             <SidebarItem icon={<HiStar  />} text="Review" link="/review" />
             <SidebarItem
               icon={<HiPencil />}
-              text="Blog Posts"
+              text="Article"
               link="/blog-posts"
             />
 
