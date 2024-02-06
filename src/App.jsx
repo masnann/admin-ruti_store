@@ -22,7 +22,6 @@ import ProductReviewsPage from "./pages/review/DetailsReview";
 import EditProductPage from "./pages/product/EditProductPage";
 import OrderDetail from "./pages/order/OrderDetailPage";
 
-
 function App() {
   return (
     <div className="flex flex-col min-h-screen">
