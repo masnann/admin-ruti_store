@@ -54,8 +54,7 @@ const OrderPage = () => {
   };
 
   const handleDetails = (id) => {
-    // Logika untuk meng-handle details
-    console.log(`Details button clicked for ID ${id}`);
+    navigate(`/orders/details/${id}`);
   };
 
   const handleSearchChange = (e) => {
@@ -137,19 +136,19 @@ const OrderPage = () => {
                       <td className="border p-3 text-center">
                         <button
                           className="mr-2 text-purple-600 hover:text-purple-900"
-                          onClick={() => handleEdit(order.id_order)}
+                          onClick={() => handleEdit(order.id)}
                         >
                           <FaEdit />
                         </button>
                         <button
                           className="mr-2 text-blue-600 hover:text-blue-900"
-                          onClick={() => handleDetails(order.id_order)}
+                          onClick={() => handleDetails(order.id)}
                         >
                           <FaInfoCircle />
                         </button>
                         <button
                           className="text-red-600 hover:text-red-900"
-                          onClick={() => handleDelete(order.id_order)}
+                          onClick={() => handleDelete(order.id)}
                         >
                           <FaTrash />
                         </button>
