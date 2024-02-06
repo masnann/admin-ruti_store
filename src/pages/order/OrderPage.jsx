@@ -1,10 +1,11 @@
-// PaymentPage.jsx
+// OrderPage.jsx
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { FaEdit, FaTrash, FaInfoCircle } from "react-icons/fa";
+import { FaInfoCircle } from "react-icons/fa";
 import Sidebar from "../../components/sidebar/Sidebar";
 import { Pagination } from "../../components/pagination/Pagination";
 import getOrderList from "../../hooks/order/GetOrderApi";
+
 
 const OrderPage = () => {
   const [currentPage, setCurrentPage] = useState(1);
@@ -34,7 +35,7 @@ const OrderPage = () => {
       setLoading(false);
     } catch (error) {
       console.error("Error fetching order list:", error);
-      setError(error.message || "An error occurred");
+      setError(error.message || "Terjadi kesalahan");
       setLoading(false);
     }
   };
@@ -43,23 +44,25 @@ const OrderPage = () => {
     setCurrentPage(page);
   };
 
-  const handleEdit = (id) => {
-    // Logika untuk meng-handle edit
-    console.log(`Edit button clicked for ID ${id}`);
-  };
-
-  const handleDelete = (id) => {
-    // Logika untuk meng-handle delete
-    console.log(`Delete button clicked for ID ${id}`);
-  };
-
   const handleDetails = (id) => {
-    // Logika untuk meng-handle details
-    console.log(`Details button clicked for ID ${id}`);
+    navigate(`/orders/details/${id}`);
   };
 
   const handleSearchChange = (e) => {
     setSearchTerm(e.target.value);
+  };
+
+  const formatDate = (dateString) => {
+    const options = {
+      year: "numeric",
+      month: "long",
+      day: "numeric",
+      hour: "numeric",
+      minute: "numeric",
+      timeZone: "UTC",
+      hour12: false,
+    };
+    return new Date(dateString).toLocaleDateString("id-ID", options);
   };
 
   return (
@@ -68,7 +71,7 @@ const OrderPage = () => {
       <div className="flex-1 overflow-x-hidden overflow-y-auto bg-gray-100 p-4">
         <div className="container mx-auto mt-8">
           <h1 className="text-3xl font-bold mb-4 text-indigo-800 border-b-2 border-indigo-500 pb-2">
-            Orders
+            Pesanan
           </h1>
           <div className="flex justify-end">
             <input
@@ -79,25 +82,26 @@ const OrderPage = () => {
               onChange={handleSearchChange}
             />
           </div>
-
-          {/* Display Orders Table */}
+          
           <div className="overflow-x-auto">
             <table className="min-w-full bg-white border border-gray-300 mt-4">
               <thead>
                 <tr>
                   <th className="border p-3 bg-gray-300 text-gray-700">ID</th>
                   <th className="border p-3 bg-gray-300 text-gray-700">
-                    Customer
+                    Pelanggan
                   </th>
                   <th className="border p-3 bg-gray-300 text-gray-700">
-                    Amount
-                  </th>
-                  <th className="border p-3 bg-gray-300 text-gray-700">Date</th>
-                  <th className="border p-3 bg-gray-300 text-gray-700">
-                    Order Status
+                    Jumlah
                   </th>
                   <th className="border p-3 bg-gray-300 text-gray-700">
-                    Actions
+                    Tanggal
+                  </th>
+                  <th className="border p-3 bg-gray-300 text-gray-700">
+                    Status Pesanan
+                  </th>
+                  <th className="border p-3 bg-gray-300 text-gray-700">
+                    Tindakan
                   </th>
                 </tr>
               </thead>
@@ -105,7 +109,7 @@ const OrderPage = () => {
                 {loading ? (
                   <tr>
                     <td colSpan="6" className="text-center py-4">
-                      Loading...
+                      Memuat...
                     </td>
                   </tr>
                 ) : error ? (
@@ -122,36 +126,16 @@ const OrderPage = () => {
                       <td className="border p-3">
                         Rp. {order.total_amount_paid}
                       </td>
-                      <td className="border p-3">
-                        {new Intl.DateTimeFormat("en-US", {
-                          year: "numeric",
-                          month: "numeric",
-                          day: "numeric",
-                          hour: "numeric",
-                          minute: "numeric",
-                          second: "numeric",
-                          timeZone: "UTC",
-                        }).format(new Date(order.date))}
+                      <td className="border p-3 text-center">
+                        {formatDate(order.date)}
                       </td>
                       <td className="border p-3">{order.order_status}</td>
                       <td className="border p-3 text-center">
                         <button
-                          className="mr-2 text-purple-600 hover:text-purple-900"
-                          onClick={() => handleEdit(order.id_order)}
-                        >
-                          <FaEdit />
-                        </button>
-                        <button
                           className="mr-2 text-blue-600 hover:text-blue-900"
-                          onClick={() => handleDetails(order.id_order)}
+                          onClick={() => handleDetails(order.id)}
                         >
                           <FaInfoCircle />
-                        </button>
-                        <button
-                          className="text-red-600 hover:text-red-900"
-                          onClick={() => handleDelete(order.id_order)}
-                        >
-                          <FaTrash />
                         </button>
                       </td>
                     </tr>
@@ -161,7 +145,7 @@ const OrderPage = () => {
             </table>
           </div>
 
-          {/* Display Pagination */}
+          {/* Tampilkan Paginasi */}
           <div className="mt-8">
             <Pagination
               totalPages={totalPages}

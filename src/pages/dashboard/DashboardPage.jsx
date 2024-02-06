@@ -141,10 +141,10 @@ const DashboardPage = () => {
                     </td>
                     <td
                       className={`border p-3 text-center ${getStatusColor(
-                        transaction.order_status
+                        transaction.payment_status
                       )}`}
                     >
-                      {transaction.order_status}
+                      {transaction.payment_status}
                     </td>
                   </tr>
                 ))}
