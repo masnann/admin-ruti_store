@@ -2,32 +2,26 @@
 import axios from 'axios';
 import { BASE_URL } from '../../utils/ApiConfig';
 
-const getProductList = async (page = 1, pageSize = 10) => {
+const getProductList = async (page = 1, pageSize = 10, search = "") => {
   try {
-    const token = sessionStorage.getItem('token');
-
-    if (!token) {
-      throw new Error('Token not found. Redirecting to login.');
-    }
-
-    const headers = {
-      Authorization: `Bearer ${token}`,
-    };
     const response = await axios.get(
-      `${BASE_URL}/api/v1/product/list?page=${page}&page_size=${pageSize}`, {
-        headers,
-      }
+      `${BASE_URL}/api/v1/product/list?page=${page}&page_size=${pageSize}&search=${search}`
     );
     return response.data;
   } catch (error) {
-    console.error('Error fetching product list:', error);
+    console.error('Error fetching product:', error);
+    let errorMessage = "An error occurred";
+    
     if (error.response) {
-      throw new Error(error.response.data.message || 'An error occurred');
+      errorMessage = error.response.data.message || errorMessage;
+      console.error("Backend error message:", error.response.data.message);
     } else if (error.request) {
-      throw new Error('No response received from the server');
+      errorMessage = "No response received from the server";
     } else {
-      throw new Error('An error occurred while setting up the request');
+      errorMessage = "An error occurred while setting up the request";
     }
+
+    throw new Error(errorMessage);
   }
 };
 
