@@ -97,7 +97,7 @@ const ProductPage = () => {
   };
 
   const handleDetails = (id) => {
-    console.log(`Details button clicked for ID ${id}`);
+    navigate(`/products/details/${id}`);
   };
 
   const handleAddProduct = () => {
