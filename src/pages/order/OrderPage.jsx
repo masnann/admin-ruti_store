@@ -7,7 +7,6 @@ import { Pagination } from "../../components/pagination/Pagination";
 import getOrderList from "../../hooks/order/GetOrderApi";
 import { formatDate } from "../../utils/FormatDate";
 
-
 const OrderPage = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
@@ -15,28 +14,45 @@ const OrderPage = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [searchTerm, setSearchTerm] = useState("");
-
-  const token = sessionStorage.getItem("token");
   const navigate = useNavigate();
 
+  const token = sessionStorage.getItem("token");
   useEffect(() => {
     if (!token) {
       navigate("/login");
-    } else {
-      fetchData();
     }
-  }, [token, navigate, currentPage, searchTerm]);
+  }, [token, navigate]);
 
-  const fetchData = async () => {
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        setLoading(true);
+        const response = await getOrderList(currentPage, 10);
+        setOrderData(response.data);
+        setTotalPages(response.pagination.total_pages);
+        setLoading(false);
+      } catch (error) {
+        console.error("Error fetching order list:", error);
+        setError(error.message || "Terjadi kesalahan");
+        setLoading(false);
+      }
+    };
+
+    fetchData();
+  }, [currentPage]);
+
+  const handleSearch = async (e) => {
+    e.preventDefault();
     try {
       setLoading(true);
-      const response = await getOrderList(currentPage, 10, searchTerm);
+      const response = await getOrderList(1, 10, searchTerm);
       setOrderData(response.data);
       setTotalPages(response.pagination.total_pages);
+      setCurrentPage(1);
       setLoading(false);
     } catch (error) {
       console.error("Error fetching order list:", error);
-      setError(error.message || "Terjadi kesalahan");
+      setError(error);
       setLoading(false);
     }
   };
@@ -62,15 +78,23 @@ const OrderPage = () => {
             Pesanan
           </h1>
           <div className="flex justify-end">
-            <input
-              type="text"
-              placeholder="Pencarian"
-              className="border px-4 py-2 rounded-md"
-              value={searchTerm}
-              onChange={handleSearchChange}
-            />
+            <form onSubmit={handleSearch} className="flex gap-2">
+              <input
+                type="text"
+                placeholder="Cari pelanggan..."
+                className="border px-4 py-2 rounded-md"
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+              />
+              <button
+                type="submit"
+                className="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600"
+              >
+                Cari
+              </button>
+            </form>
           </div>
-          
+
           <div className="overflow-x-auto">
             <table className="min-w-full bg-white border border-gray-300 mt-4">
               <thead>
@@ -80,7 +104,7 @@ const OrderPage = () => {
                     Pelanggan
                   </th>
                   <th className="border p-3 bg-gray-300 text-gray-700">
-                    Jumlah
+                    Total Bayar
                   </th>
                   <th className="border p-3 bg-gray-300 text-gray-700">
                     Tanggal
@@ -88,9 +112,7 @@ const OrderPage = () => {
                   <th className="border p-3 bg-gray-300 text-gray-700">
                     Status Pesanan
                   </th>
-                  <th className="border p-3 bg-gray-300 text-gray-700">
-                    Aksi
-                  </th>
+                  <th className="border p-3 bg-gray-300 text-gray-700">Aksi</th>
                 </tr>
               </thead>
               <tbody>
@@ -108,7 +130,10 @@ const OrderPage = () => {
                   </tr>
                 ) : (
                   orderData.map((order) => (
-                    <tr key={order.id_order} className="hover:bg-gray-100 text-center">
+                    <tr
+                      key={order.id_order}
+                      className="hover:bg-gray-100 text-center"
+                    >
                       <td className="border p-3">{order.id_order}</td>
                       <td className="border p-3">{order.name}</td>
                       <td className="border p-3">
