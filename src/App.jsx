@@ -21,6 +21,7 @@ import ReviewsPage from "./pages/review/ReviewPage";
 import ProductReviewsPage from "./pages/review/DetailsReview";
 import EditProductPage from "./pages/product/EditProductPage";
 import OrderDetail from "./pages/order/OrderDetailPage";
+import ProductDetailPage from "./pages/product/DetailProductPage";
 
 function App() {
   return (
@@ -34,6 +35,7 @@ function App() {
             <Route path="/products" element={<ProductPage />} />
             <Route path="/products/create" element={<AddProductPage />} />
             <Route path="/products/detail/:id" element={<EditProductPage />} />
+            <Route path="/products/details/:id" element={<ProductDetailPage />} />
             <Route path="/orders" element={<OrderPage />} />
             <Route exact path="/orders/details/:id" element={<OrderDetail />} />  
             <Route path="/payments" element={<PaymentPage />} />

@@ -16,28 +16,45 @@ const PaymentPage = () => {
   const [error, setError] = useState(null);
   const [searchTerm, setSearchTerm] = useState("");
   const [showCalendar, setShowCalendar] = useState(false);
-
-  const token = sessionStorage.getItem("token");
   const navigate = useNavigate();
 
+  const token = sessionStorage.getItem("token");
   useEffect(() => {
     if (!token) {
       navigate("/login");
-    } else {
-      fetchData();
     }
-  }, [token, navigate, currentPage, searchTerm]);
+  }, [token, navigate]);
 
-  const fetchData = async () => {
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        setLoading(true);
+        const response = await getPaymentList(currentPage, 10);
+        setPaymentData(response.data);
+        setTotalPages(response.pagination.total_pages);
+        setLoading(false);
+      } catch (error) {
+        console.error("Error fetching payment list:", error);
+        setError(error.message || "An error occurred");
+        setLoading(false);
+      }
+    };
+
+    fetchData();
+  }, [currentPage]);
+
+  const handleSearch = async (e) => {
+    e.preventDefault();
     try {
       setLoading(true);
-      const response = await getPaymentList(currentPage, 10, searchTerm);
+      const response = await getPaymentList(1, 10, searchTerm);
       setPaymentData(response.data);
       setTotalPages(response.pagination.total_pages);
+      setCurrentPage(1);
       setLoading(false);
     } catch (error) {
       console.error("Error fetching payment list:", error);
-      setError(error.message || "An error occurred");
+      setError(error);
       setLoading(false);
     }
   };
@@ -54,10 +71,6 @@ const PaymentPage = () => {
     setShowCalendar(false);
   };
 
-  const handleSearchChange = (e) => {
-    setSearchTerm(e.target.value);
-  };
-
   return (
     <div className="flex h-screen bg-gray-100">
       <Sidebar />
@@ -69,20 +82,28 @@ const PaymentPage = () => {
           <div className="flex justify-between items-center">
             <div>
               <button
-                className="px-10 py-2 bg-indigo-500 text-white rounded-md hover:bg-indigo-600 flex items-center"
+                className="px-6 py-2 bg-indigo-500 text-white rounded-md hover:bg-indigo-600 flex items-center"
                 onClick={() => handleDownloadReport()}
               >
                 <HiDownload className="mr-2" />
                 Unduh Laporan
               </button>
             </div>
-            <input
-              type="text"
-              placeholder="Pencarian"
-              className="border px-4 py-2 rounded-md"
-              value={searchTerm}
-              onChange={handleSearchChange}
-            />
+            <form onSubmit={handleSearch} className="flex gap-2">
+              <input
+                type="text"
+                placeholder="Cari pelanggan..."
+                className="border px-4 py-2 rounded-md"
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+              />
+              <button
+                type="submit"
+                className="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600"
+              >
+                Cari
+              </button>
+            </form>
           </div>
 
           {/* Display Payment Table */}
@@ -95,7 +116,7 @@ const PaymentPage = () => {
                     Pelanggan
                   </th>
                   <th className="border p-3 bg-gray-300 text-gray-700">
-                    Jumlah
+                    Total Bayar
                   </th>
                   <th className="border p-3 bg-gray-300 text-gray-700">
                     Tanggal
