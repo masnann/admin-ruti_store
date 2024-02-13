@@ -2,9 +2,7 @@ import React, { useContext, createContext, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { ChevronLast, ChevronFirst } from "lucide-react";
 import {
-  HiChartBar,
   HiUserGroup,
-  HiCube,
   HiCreditCard,
   HiShoppingCart,
   HiPencil,
@@ -12,6 +10,8 @@ import {
   HiLogout,
   HiPhotograph,
   HiStar,
+  HiShoppingBag,
+  HiPresentationChartBar,
 } from "react-icons/hi";
 
 const SidebarContext = createContext();
@@ -40,15 +40,15 @@ export default function Sidebar({ children }) {
 
         <SidebarContext.Provider value={{ expanded }}>
           <ul className="flex-1 px-3">
-            <SidebarItem icon={<HiChartBar />} text="Dashboard" link="/" />
+            <SidebarItem icon={<HiPresentationChartBar/>} text="Dasbor" link="/" />
             <SidebarItem
               icon={<HiUserGroup />}
-              text="Customers"
+              text="Pelanggan"
               link="/customer"
             />
             <SidebarItem
               icon={<HiViewList />}
-              text="Category"
+              text="Kategori"
               link="/category"
             />
             <SidebarItem
@@ -56,21 +56,21 @@ export default function Sidebar({ children }) {
               text="Carousel"
               link="/carousel"
             />
-            <SidebarItem icon={<HiCube />} text="Products" link="/products" />
+            <SidebarItem icon={<HiShoppingBag />} text="Produk" link="/products" />
             <SidebarItem
               icon={<HiCreditCard />}
-              text="Payments"
+              text="Pembayaran"
               link="/payments"
             />
             <SidebarItem
               icon={<HiShoppingCart />}
-              text="Orders"
+              text="Pesanan"
               link="/orders"
             />
-            <SidebarItem icon={<HiStar  />} text="Review" link="/review" />
+            <SidebarItem icon={<HiStar />} text="Ulasan" link="/review" />
             <SidebarItem
               icon={<HiPencil />}
-              text="Article"
+              text="Artikel"
               link="/blog-posts"
             />
 
@@ -80,7 +80,7 @@ export default function Sidebar({ children }) {
 
         <SidebarContext.Provider value={{ expanded }}>
           <ul className="flex-1 px-3">
-            <SidebarItem icon={<HiLogout />} text="Logout" link="/logout" />
+            <SidebarItem icon={<HiLogout />} text="Keluar" link="/logout" />
           </ul>
         </SidebarContext.Provider>
       </nav>

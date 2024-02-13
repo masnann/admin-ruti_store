@@ -1,10 +1,12 @@
 // PaymentPage.jsx
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { FaEdit, FaTrash, FaInfoCircle } from "react-icons/fa";
+import { HiDownload } from "react-icons/hi";
 import Sidebar from "../../components/sidebar/Sidebar";
 import { Pagination } from "../../components/pagination/Pagination";
 import getPaymentList from "../../hooks/payment/GetPaymentApi";
+import Calendar from "../../components/calender/Calendar";
+import { formatDate } from "../../utils/FormatDate";
 
 const PaymentPage = () => {
   const [currentPage, setCurrentPage] = useState(1);
@@ -13,6 +15,7 @@ const PaymentPage = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [searchTerm, setSearchTerm] = useState("");
+  const [showCalendar, setShowCalendar] = useState(false);
 
   const token = sessionStorage.getItem("token");
   const navigate = useNavigate();
@@ -43,9 +46,12 @@ const PaymentPage = () => {
     setCurrentPage(page);
   };
 
-  const handleDetails = (id) => {
-    // Logika untuk meng-handle details
-    console.log(`Details button clicked for ID ${id}`);
+  const handleDownloadReport = () => {
+    setShowCalendar(true);
+  };
+
+  const handleCloseCalendar = () => {
+    setShowCalendar(false);
   };
 
   const handleSearchChange = (e) => {
@@ -58,9 +64,18 @@ const PaymentPage = () => {
       <div className="flex-1 overflow-x-hidden overflow-y-auto bg-gray-100 p-4">
         <div className="container mx-auto mt-8">
           <h1 className="text-3xl font-bold mb-4 text-indigo-800 border-b-2 border-indigo-500 pb-2">
-            Payment
+            Pembayaran
           </h1>
-          <div className="flex justify-end">
+          <div className="flex justify-between items-center">
+            <div>
+              <button
+                className="px-10 py-2 bg-indigo-500 text-white rounded-md hover:bg-indigo-600 flex items-center"
+                onClick={() => handleDownloadReport()}
+              >
+                <HiDownload className="mr-2" />
+                Unduh Laporan
+              </button>
+            </div>
             <input
               type="text"
               placeholder="Pencarian"
@@ -77,73 +92,46 @@ const PaymentPage = () => {
                 <tr>
                   <th className="border p-3 bg-gray-300 text-gray-700">ID</th>
                   <th className="border p-3 bg-gray-300 text-gray-700">
-                    Customer
+                    Pelanggan
                   </th>
                   <th className="border p-3 bg-gray-300 text-gray-700">
-                    Amount
+                    Jumlah
                   </th>
-                  <th className="border p-3 bg-gray-300 text-gray-700">Date</th>
                   <th className="border p-3 bg-gray-300 text-gray-700">
-                    Payment Status
+                    Tanggal
                   </th>
-                  {/* <th className="border p-3 bg-gray-300 text-gray-700">
-                    Actions
-                  </th> */}
+                  <th className="border p-3 bg-gray-300 text-gray-700">
+                    Status Pembayaran
+                  </th>
                 </tr>
               </thead>
+
               <tbody>
                 {loading ? (
                   <tr>
-                    <td colSpan="6" className="text-center py-4">
+                    <td colSpan="5" className="text-center py-4">
                       Loading...
                     </td>
                   </tr>
                 ) : error ? (
                   <tr>
-                    <td colSpan="6" className="text-center py-4 text-red-500">
+                    <td colSpan="5" className="text-center py-4 text-red-500">
                       Error: {error}
                     </td>
                   </tr>
                 ) : (
                   paymentData.map((payment) => (
-                    <tr key={payment.id_order} className="hover:bg-gray-100">
+                    <tr
+                      key={payment.id_order}
+                      className="hover:bg-gray-100 text-center"
+                    >
                       <td className="border p-3">{payment.id_order}</td>
                       <td className="border p-3">{payment.name}</td>
                       <td className="border p-3">
                         Rp. {payment.total_amount_paid}
                       </td>
-                      <td className="border p-3">
-                        {new Intl.DateTimeFormat("en-US", {
-                          year: "numeric",
-                          month: "numeric",
-                          day: "numeric",
-                          hour: "numeric",
-                          minute: "numeric",
-                          second: "numeric",
-                          timeZone: "UTC",
-                        }).format(new Date(payment.date))}
-                      </td>
+                      <td className="border p-3">{formatDate(payment.date)}</td>
                       <td className="border p-3">{payment.payment_status}</td>
-                      {/* <td className="border p-3">
-                        <button
-                          className="mr-2 text-purple-600 hover:text-purple-900"
-                          onClick={() => handleEdit(payment.id_order)}
-                        >
-                          <FaEdit />
-                        </button>
-                        <button
-                          className="mr-2 text-blue-600 hover:text-blue-900"
-                          onClick={() => handleDetails(payment.id_order)}
-                        >
-                          <FaInfoCircle />
-                        </button>
-                        <button
-                          className="text-red-600 hover:text-red-900"
-                          onClick={() => handleDelete(payment.id_order)}
-                        >
-                          <FaTrash />
-                        </button>
-                      </td> */}
                     </tr>
                   ))
                 )}
@@ -159,6 +147,9 @@ const PaymentPage = () => {
               onChangePage={handlePageChange}
             />
           </div>
+
+          {/* Menampilkan kalender jika state showCalendar bernilai true */}
+          {showCalendar && <Calendar onClose={handleCloseCalendar} />}
         </div>
       </div>
     </div>
