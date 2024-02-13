@@ -5,6 +5,7 @@ import { FaInfoCircle } from "react-icons/fa";
 import Sidebar from "../../components/sidebar/Sidebar";
 import { Pagination } from "../../components/pagination/Pagination";
 import getOrderList from "../../hooks/order/GetOrderApi";
+import { formatDate } from "../../utils/FormatDate";
 
 
 const OrderPage = () => {
@@ -52,19 +53,6 @@ const OrderPage = () => {
     setSearchTerm(e.target.value);
   };
 
-  const formatDate = (dateString) => {
-    const options = {
-      year: "numeric",
-      month: "long",
-      day: "numeric",
-      hour: "numeric",
-      minute: "numeric",
-      timeZone: "UTC",
-      hour12: false,
-    };
-    return new Date(dateString).toLocaleDateString("id-ID", options);
-  };
-
   return (
     <div className="flex h-screen bg-gray-100">
       <Sidebar />
@@ -101,7 +89,7 @@ const OrderPage = () => {
                     Status Pesanan
                   </th>
                   <th className="border p-3 bg-gray-300 text-gray-700">
-                    Tindakan
+                    Aksi
                   </th>
                 </tr>
               </thead>
@@ -120,7 +108,7 @@ const OrderPage = () => {
                   </tr>
                 ) : (
                   orderData.map((order) => (
-                    <tr key={order.id_order} className="hover:bg-gray-100">
+                    <tr key={order.id_order} className="hover:bg-gray-100 text-center">
                       <td className="border p-3">{order.id_order}</td>
                       <td className="border p-3">{order.name}</td>
                       <td className="border p-3">
