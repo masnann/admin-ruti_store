@@ -50,7 +50,7 @@ const AddCarouselPage = () => {
       <div className="flex-1 overflow-x-hidden overflow-y-auto bg-gray-100 p-4">
         <div className="container mx-auto mt-8">
           <h1 className="text-3xl font-bold mb-4 text-indigo-800 border-b-2 border-indigo-500 pb-2">
-            Add Carousel
+            Tambah Carousel
           </h1>
 
           <div className="grid grid-cols-2 gap-4 bg-white p-6 rounded-md">
@@ -59,7 +59,7 @@ const AddCarouselPage = () => {
                 htmlFor="name"
                 className="block text-sm font-bold text-gray-600"
               >
-                Name
+                Nama
               </label>
               <input
                 type="text"
@@ -68,7 +68,7 @@ const AddCarouselPage = () => {
                 className={`mt-1 p-2 w-full border rounded-md bg-gray-100 ${
                   nameAlert ? "border-red-500" : ""
                 }`}
-                placeholder="Enter carousel name"
+                placeholder="Masukan nama carousel"
                 value={formData.name}
                 onChange={(e) => {
                   handleChange("name", e.target.value);
@@ -86,7 +86,7 @@ const AddCarouselPage = () => {
                 htmlFor="photo"
                 className="block text-sm font-bold text-gray-600"
               >
-                Photo
+                Foto
               </label>
               <input
                 type="file"
@@ -111,7 +111,7 @@ const AddCarouselPage = () => {
             onClick={handleAddCarousel}
             disabled={loading}
           >
-            {loading ? "Adding..." : "Add Carousel"}
+            {loading ? "Menyimpan..." : "Simpan"}
           </button>
         </div>
       </div>
