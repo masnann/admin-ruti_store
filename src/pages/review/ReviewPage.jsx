@@ -23,7 +23,6 @@ const ReviewsPage = () => {
   };
 
   const handleDetail = (id) => {
-    // Navigasi ke halaman product reviews dengan menggunakan product_id
     navigate(`/review/detail/${id}`);
   };
 
