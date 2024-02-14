@@ -1,4 +1,3 @@
-// Import beberapa dependencies yang dibutuhkan
 import React, { useState, useEffect } from "react";
 import { FaStar } from "react-icons/fa";
 import { Pagination } from "../../components/pagination/Pagination";
@@ -7,10 +6,9 @@ import getReviewsList from "../../hooks/review/GetReviewProductApi";
 import { useParams } from "react-router-dom";
 import Sidebar from "../../components/sidebar/Sidebar";
 
-
 const ProductReviewsPage = () => {
   const { id } = useParams();
-  const [productDetail, setProductDetail] = useState(null); // Menambah state untuk menyimpan detail produk
+  const [productDetail, setProductDetail] = useState(null); 
   const [reviews, setReviews] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
@@ -20,11 +18,10 @@ const ProductReviewsPage = () => {
   useEffect(() => {
     const fetchProductAndReviews = async () => {
       try {
-        // Fetch detail produk
+
         const productData = await getProductDetails(id);
         setProductDetail(productData);
 
-        // Fetch ulasan produk
         const reviewsResponse = await getReviewsList(id, currentPage);
         setReviews(reviewsResponse.data);
         setTotalPages(reviewsResponse.pagination.total_pages);
@@ -44,11 +41,11 @@ const ProductReviewsPage = () => {
   };
 
   if (!productDetail || loading) {
-    return <p>Loading...</p>; // Menampilkan loading jika data produk sedang diambil
+    return <p>Loading...</p>; 
   }
 
   if (error) {
-    return <p>Error: {error}</p>; // Menampilkan pesan error jika terjadi kesalahan
+    return <p>Error: {error}</p>; 
   }
 
   return (

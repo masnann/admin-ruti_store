@@ -1,34 +1,58 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import Sidebar from "../../components/sidebar/Sidebar";
-import useEditCategory from "../../hooks/category/EditCategory";
 import LoadingModal from "../../components/modals/Loading";
 import { useParams, useNavigate } from "react-router-dom";
+import getCategoryDetails from "../../hooks/category/DetailsCategoryApi";
+import updateCategory from "../../hooks/category/EditCategoryApi";
 
 const EditCategoryPage = () => {
   const { id } = useParams();
   const navigate = useNavigate();
-  const {
-    formData,
-    loading: formLoading,
-    handleChange,
-    handleFileChange,
-    editCategory,
-    success,
-  } = useEditCategory(id);
+  const [formData, setFormData] = useState({
+    name: "",
+    description: "",
+    photo: null,
+  });
+  const [formLoading, setFormLoading] = useState(false);
+
+  const handleChange = (field, value) => {
+    setFormData((prevData) => ({
+      ...prevData,
+      [field]: value,
+    }));
+  };
+
+  const handleFileChange = (field, file) => {
+    setFormData((prevData) => ({
+      ...prevData,
+      [field]: file,
+    }));
+  };
 
   const handleEditCategory = async () => {
-    await editCategory();
+    try {
+      setFormLoading(true);
+      await updateCategory(id, formData);
+      navigate("/category");
+    } catch (error) {
+      console.error("Error updating category:", error.message);
+    } finally {
+      setFormLoading(false);
+    }
   };
 
   useEffect(() => {
-    // No need to fetch data here, as it's handled within the useEditCategory hook
-  }, []); // Dependency array left empty to ensure it runs only once
+    const fetchCategoryDetails = async () => {
+      try {
+        const response = await getCategoryDetails(id);
+        setFormData(response);
+      } catch (error) {
+        console.error("Error fetching category details:", error.message);
+      }
+    };
+    fetchCategoryDetails();
+  }, [id]);
 
-  useEffect(() => {
-    if (success) {
-      navigate("/category");
-    }
-  }, [success, navigate]);
 
   return (
     <div className="flex h-screen bg-gray-100">
@@ -36,7 +60,7 @@ const EditCategoryPage = () => {
       <div className="flex-1 overflow-x-hidden overflow-y-auto bg-gray-100 p-4">
         <div className="container mx-auto mt-8">
           <h1 className="text-3xl font-bold mb-4 text-indigo-800 border-b-2 border-indigo-500 pb-2">
-            Edit Category
+            Edit Kategori
           </h1>
 
           <div className="grid grid-cols-2 gap-4 bg-white p-6 rounded-md">
@@ -45,7 +69,7 @@ const EditCategoryPage = () => {
                 htmlFor="name"
                 className="block text-sm font-bold text-gray-600"
               >
-                Name
+                Nama
               </label>
               <input
                 type="text"
@@ -62,7 +86,7 @@ const EditCategoryPage = () => {
                 htmlFor="photo"
                 className="block text-sm font-bold text-gray-600"
               >
-                Photo
+                Foto
               </label>
               <input
                 type="file"
@@ -77,7 +101,7 @@ const EditCategoryPage = () => {
                 htmlFor="description"
                 className="block text-sm font-bold text-gray-600"
               >
-                Description
+                Deskripsi
               </label>
               <textarea
                 name="description"
@@ -85,7 +109,7 @@ const EditCategoryPage = () => {
                 rows="6"
                 className="mt-1 p-2 w-full border rounded-md bg-gray-100"
                 placeholder="Enter blog post description"
-                value={formData.content}
+                value={formData.description}
                 onChange={(e) => handleChange("description", e.target.value)}
               ></textarea>
             </div>
@@ -95,7 +119,7 @@ const EditCategoryPage = () => {
             onClick={handleEditCategory}
             disabled={formLoading}
           >
-            {formLoading ? "Updating..." : "Update Category"}
+            {formLoading ? "Menyimpan..." : "Simpan"}
           </button>
 
           {formLoading && <LoadingModal />}
