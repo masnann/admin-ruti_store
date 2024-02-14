@@ -33,7 +33,7 @@ const ReviewsPage = () => {
       <div className="flex-1 overflow-x-hidden overflow-y-auto bg-gray-100 p-4">
         <div className="container mx-auto mt-8">
           <h1 className="text-3xl font-bold mb-4 text-indigo-800 border-b-2 border-indigo-500 pb-2">
-            Reviews
+            Ulasan
           </h1>
 
           {/* Display Reviews Table */}
@@ -42,16 +42,16 @@ const ReviewsPage = () => {
               <thead>
                 <tr>
                   <th className="border p-3 bg-gray-300 text-gray-700">
-                    Product Name
+                    Nama Produk
                   </th>
                   <th className="border p-3 bg-gray-300 text-gray-700">
                     Rating
                   </th>
                   <th className="border p-3 bg-gray-300 text-gray-700">
-                    Total Review
+                    Total Ulasan
                   </th>
                   <th className="border p-3 bg-gray-300 text-gray-700">
-                    Actions
+                    Aksi
                   </th>
                 </tr>
               </thead>
@@ -59,7 +59,7 @@ const ReviewsPage = () => {
                 {loading ? (
                   <tr>
                     <td colSpan="4" className="text-center py-4">
-                      Loading...
+                      Memuat...
                     </td>
                   </tr>
                 ) : error ? (
