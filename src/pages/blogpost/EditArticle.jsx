@@ -11,7 +11,7 @@ const EditBlogPostPage = () => {
   const [formData, setFormData] = useState({
     title: "",
     content: "",
-    photo: null, // Tambahkan properti photo ke dalam state
+    photo: null,
   });
   const [formLoading, setFormLoading] = useState(false);
 
