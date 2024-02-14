@@ -165,7 +165,7 @@ const ProductPage = () => {
                 {loading ? (
                   <tr>
                     <td colSpan="10" className="text-center py-4">
-                      Loading...
+                      Memuat...
                     </td>
                   </tr>
                 ) : error ? (
@@ -203,7 +203,7 @@ const ProductPage = () => {
                             />
                           </div>
                         ) : (
-                          "No Photo"
+                          "Tidak ada foto"
                         )}
                       </td>
 

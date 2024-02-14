@@ -7,6 +7,7 @@ import { Pagination } from "../../components/pagination/Pagination";
 import useArticleData from "../../hooks/article/GetAll";
 import useDeleteArticle from "../../hooks/article/DeleteBlogpost";
 import DeleteConfirmationModal from "../../components/modals/Delete";
+import { formatDate } from "../../utils/FormatDate";
 
 const ArticlePage = () => {
   const [currentPage, setCurrentPage] = useState(1);
@@ -70,49 +71,53 @@ const ArticlePage = () => {
     navigate("/blog-posts/create");
   };
 
+  const truncateDescription = (description, maxWords) => {
+    const words = description.split(" ");
+    if (words.length > maxWords) {
+      return words.slice(0, maxWords).join(" ") + "...";
+    }
+    return description;
+  };
+
   return (
     <div className="flex h-screen bg-gray-100">
       <Sidebar />
       <div className="flex-1 overflow-x-hidden overflow-y-auto bg-gray-100 p-4">
         <div className="container mx-auto mt-8">
           <h1 className="text-3xl font-bold mb-4 text-indigo-800 border-b-2 border-indigo-500 pb-2">
-            Articles
+            Artikel
           </h1>
 
           <div className="overflow-x-auto">
             <button
-              className="px-10 py-2 bg-indigo-500 text-white rounded-md hover:bg-indigo-600 flex items-center"
+              className="px-6 py-2 bg-indigo-500 text-white rounded-md hover:bg-indigo-600 flex items-center"
               onClick={handleAddBlogpost}
             >
               <FaPlus className="mr-2" />
-              Add Blogpost
+              Tambah Artikel
             </button>
 
             <table className="min-w-full bg-white border border-gray-300 mt-4">
               <thead>
                 <tr>
                   <th className="border p-3 bg-gray-300 text-gray-700">
-                    Title
+                    Judul
                   </th>
                   <th className="border p-3 bg-gray-300 text-gray-700">
-                    Author
+                    Penulis
                   </th>
                   <th className="border p-3 bg-gray-300 text-gray-700">
-                    Date Created
+                    Dibuat Pada
                   </th>
-                  <th className="border p-3 bg-gray-300 text-gray-700">
-                    Photo
-                  </th>
-                  <th className="border p-3 bg-gray-300 text-gray-700">
-                    Actions
-                  </th>
+                  <th className="border p-3 bg-gray-300 text-gray-700">Foto</th>
+                  <th className="border p-3 bg-gray-300 text-gray-700">Aksi</th>
                 </tr>
               </thead>
               <tbody>
                 {loading ? (
                   <tr>
                     <td colSpan="5" className="text-center py-4">
-                      Loading...
+                      Memuat...
                     </td>
                   </tr>
                 ) : error ? (
@@ -124,20 +129,26 @@ const ArticlePage = () => {
                 ) : (
                   articleData.map((article) => (
                     <tr key={article.id} className="hover:bg-gray-100">
-                      <td className="border p-3">{article.title}</td>
-                      <td className="border p-3">{article.author}</td>
                       <td className="border p-3">
-                        {new Date(article.created_at).toLocaleString()}
+                        {truncateDescription(article.title, 5)}
                       </td>
-                      <td className="border p-3">
+                      <td className="border p-3 text-center">
+                        {article.author}
+                      </td>
+                      <td className="border p-3 text-center">
+                        {formatDate(article.created_at)}
+                      </td>
+                      <td className="border p-3 text-center">
                         {article.photo ? (
-                          <img
-                            src={article.photo}
-                            alt={`Photo for ${article.title}`}
-                            className="w-12 h-12 object-cover"
-                          />
+                          <div className="flex justify-center items-center">
+                            <img
+                              src={article.photo}
+                              alt={`Photo for ${article.title}`}
+                              className="w-12 h-12 object-cover"
+                            />
+                          </div>
                         ) : (
-                          <p className="text-gray-800">No photo available</p>
+                          <p className="text-gray-800">Tidak ada foto</p>
                         )}
                       </td>
                       <td className="border p-3 text-center">
