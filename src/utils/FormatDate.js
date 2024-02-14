@@ -6,6 +6,7 @@ const formatDate = (dateString) => {
     hour: "numeric",
     minute: "numeric",
     timeZone: "UTC",
+    hour12: true,
   };
 
   const formattedDate = new Date(dateString).toLocaleDateString(
@@ -14,4 +15,5 @@ const formatDate = (dateString) => {
   );
   return formattedDate;
 };
+
 export { formatDate };

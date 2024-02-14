@@ -36,7 +36,7 @@ const AddBlogPostPage = () => {
       <div className="flex-1 overflow-x-hidden overflow-y-auto bg-gray-100 p-4">
         <div className="container mx-auto mt-8">
           <h1 className="text-3xl font-bold mb-4 text-indigo-800 border-b-2 border-indigo-500 pb-2">
-            Add Blog Post
+            Tambah Artikel
           </h1>
 
           <div className="grid grid-cols-2 gap-4 bg-white p-6 rounded-md">
@@ -45,14 +45,14 @@ const AddBlogPostPage = () => {
                 htmlFor="title"
                 className="block text-sm font-bold text-gray-600"
               >
-                Title
+                Judul
               </label>
               <input
                 type="text"
                 name="title"
                 id="title"
                 className="mt-1 p-2 w-full border rounded-md bg-gray-100"
-                placeholder="Enter blog post title"
+                placeholder="Masukan judul artikel"
                 value={formData.title}
                 onChange={(e) => handleChange("title", e.target.value)}
               />
@@ -63,7 +63,7 @@ const AddBlogPostPage = () => {
                 htmlFor="photo"
                 className="block text-sm font-bold text-gray-600"
               >
-                Photo
+                Foto
               </label>
               <input
                 type="file"
@@ -79,14 +79,14 @@ const AddBlogPostPage = () => {
                 htmlFor="content"
                 className="block text-sm font-bold text-gray-600"
               >
-                Content
+                Konten
               </label>
               <textarea
                 name="content"
                 id="content"
                 rows="6"
                 className="mt-1 p-2 w-full border rounded-md bg-gray-100"
-                placeholder="Enter blog post content"
+                placeholder="Masukan konten artikel"
                 value={formData.content}
                 onChange={(e) => handleChange("content", e.target.value)}
               ></textarea>
@@ -98,12 +98,12 @@ const AddBlogPostPage = () => {
               onClick={handleAddBlogPost}
               disabled={formLoading}
             >
-              {formLoading ? "Saving..." : "Save Blog Post"}
+              {formLoading ? "Menyimoan..." : "Simpan"}
             </button>
 
             {formError && <p className="text-red-500 mt-2">{formError}</p>}
             {success && (
-              <p className="text-green-500 mt-2">Blog post added successfully!</p>
+              <p className="text-green-500 mt-2">Artikel berhasil ditambahkan</p>
             )}
           </div>
 
