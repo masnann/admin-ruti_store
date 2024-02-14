@@ -7,6 +7,7 @@ import { Pagination } from "../../components/pagination/Pagination";
 import useCarouselData from "../../hooks/home/GetAllCarousel";
 import useDeleteCarousel from "../../hooks/home/DeleteCaousel";
 import DeleteConfirmationModal from "../../components/modals/Delete";
+import { formatDate } from "../../utils/FormatDate";
 
 const CarouselPage = () => {
   const [currentPage, setCurrentPage] = useState(1);
@@ -19,8 +20,10 @@ const CarouselPage = () => {
     }
   }, [token, navigate]);
 
-  const { carouselData, loading, error, totalPages } =
-    useCarouselData(currentPage, token);
+  const { carouselData, loading, error, totalPages } = useCarouselData(
+    currentPage,
+    token
+  );
 
   const { deleteCarousel, resetDeleteState } = useDeleteCarousel();
 
@@ -72,7 +75,7 @@ const CarouselPage = () => {
           {/* Display Carousel Table */}
           <div className="overflow-x-auto mt-2">
             <button
-              className="px-10 py-2 bg-indigo-500 text-white rounded-md hover:bg-indigo-600 flex items-center"
+              className="px-6 py-2 bg-indigo-500 text-white rounded-md hover:bg-indigo-600 flex items-center"
               onClick={() => handleAddCarousel()}
             >
               <FaPlus className="mr-2" />
@@ -83,21 +86,20 @@ const CarouselPage = () => {
               <thead>
                 <tr>
                   <th className="border p-3 bg-gray-300 text-gray-700">
-                    Title
+                    Judul
                   </th>
+                  <th className="border p-3 bg-gray-300 text-gray-700">Foto</th>
                   <th className="border p-3 bg-gray-300 text-gray-700">
-                    Image URL
+                    Dibuat Pada
                   </th>
-                  <th className="border p-3 bg-gray-300 text-gray-700">
-                    Actions
-                  </th>
+                  <th className="border p-3 bg-gray-300 text-gray-700">Aksi</th>
                 </tr>
               </thead>
               <tbody>
                 {loading ? (
                   <tr>
                     <td colSpan="3" className="text-center py-4">
-                      Loading...
+                      Memuat...
                     </td>
                   </tr>
                 ) : error ? (
@@ -110,16 +112,24 @@ const CarouselPage = () => {
                   carouselData.map((carousel) => (
                     <tr key={carousel.id} className="hover:bg-gray-100">
                       <td className="border p-3">{carousel.name}</td>
+                      
                       <td className="border p-3 text-center">
                         {carousel.photo ? (
-                          <img
-                            src={carousel.photo}
-                            alt={`Photo for ${carousel.name}`}
-                            className="w-12 h-12 object-cover"
-                          />
+                          <div className="flex justify-center items-center">
+                            <img
+                              src={carousel.photo}
+                              alt={`Photo for ${carousel.name}`}
+                              className="w-12 h-12 object-cover"
+                            />
+                          </div>
                         ) : (
-                          <p className="text-gray-800">No photo available</p>
+                          <p className="text-gray-800">
+                            Tidak ada foto tersedia
+                          </p>
                         )}
+                      </td>
+                      <td className="border p-3 text-center">
+                        {formatDate(carousel.created_at)}
                       </td>
                       <td className="border p-3 text-center">
                         <button

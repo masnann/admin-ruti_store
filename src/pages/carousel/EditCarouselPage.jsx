@@ -1,34 +1,56 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import Sidebar from "../../components/sidebar/Sidebar";
-import useEditCarousel from "../../hooks/home/EditCarousel";
 import LoadingModal from "../../components/modals/Loading";
 import { useParams, useNavigate } from "react-router-dom";
+import getCarouselDetails from "../../hooks/home/DetailCarouselApi";
+import updateCarousel from "../../hooks/home/EditCarouselApi";
 
 const EditCarouselPage = () => {
   const { id } = useParams();
   const navigate = useNavigate();
-  const {
-    formData,
-    loading: formLoading,
-    handleChange,
-    handleFileChange,
-    editCarousel,
-    success,
-  } = useEditCarousel(id);
+  const [formData, setFormData] = useState({
+    name: "",
+    photo: null,
+  });
+  const [formLoading, setFormLoading] = useState(false);
+
+  const handleChange = (field, value) => {
+    setFormData((prevData) => ({
+      ...prevData,
+      [field]: value,
+    }));
+  };
+
+  const handleFileChange = (field, file) => {
+    setFormData((prevData) => ({
+      ...prevData,
+      [field]: file,
+    }));
+  };
 
   const handleEditCarousel = async () => {
-    await editCarousel();
+    try {
+      setFormLoading(true);
+      await updateCarousel(id, formData);
+      navigate("/carousel");
+    } catch (error) {
+      console.error("Error updating carousel:", error.message);
+    } finally {
+      setFormLoading(false);
+    }
   };
 
   useEffect(() => {
-    // No need to fetch data here, as it's handled within the useEditCarousel hook
-  }, []); // Dependency array left empty to ensure it runs only once
-
-  useEffect(() => {
-    if (success) {
-      navigate("/carousel");
-    }
-  }, [success, navigate]);
+    const fetchCarouselDetails = async () => {
+      try {
+        const response = await getCarouselDetails(id);
+        setFormData(response);
+      } catch (error) {
+        console.error("Error fetching carousel details:", error.message);
+      }
+    };
+    fetchCarouselDetails();
+  }, [id]);
 
   return (
     <div className="flex h-screen bg-gray-100">
@@ -45,14 +67,13 @@ const EditCarouselPage = () => {
                 htmlFor="name"
                 className="block text-sm font-bold text-gray-600"
               >
-                Name
+                Nama
               </label>
               <input
                 type="text"
                 name="name"
                 id="name"
                 className="mt-1 p-2 w-full border rounded-md bg-gray-100"
-                placeholder="Enter carousel name"
                 value={formData.name}
                 onChange={(e) => handleChange("name", e.target.value)}
               />
@@ -62,7 +83,7 @@ const EditCarouselPage = () => {
                 htmlFor="photo"
                 className="block text-sm font-bold text-gray-600"
               >
-                Photo
+                Foto
               </label>
               <input
                 type="file"
@@ -79,7 +100,7 @@ const EditCarouselPage = () => {
             onClick={handleEditCarousel}
             disabled={formLoading}
           >
-            {formLoading ? "Updating..." : "Update Carousel"}
+            {formLoading ? "Menyimpan..." : "Simpan"}
           </button>
 
           {formLoading && <LoadingModal />}
