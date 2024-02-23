@@ -91,6 +91,7 @@ const EditProductPage = () => {
       };
   
       console.log("id product", id)
+      console.log("Data yang dikirim ke API:", productData);
       const updatedProduct = await updateProductApi(id, productData);
   
       for (let i = 0; i < uploadedPhotos.length; i++) {
@@ -113,21 +114,21 @@ const EditProductPage = () => {
     }
   };
   
-
   const handleSelectChange = (e) => {
     const selectedValues = Array.from(e.target.selectedOptions).map(
-      (option) => option.value
+      (option) => parseInt(option.value, 10)  
     );
-
+  
     setSelectedOptions(selectedValues);
     setFormData((prevData) => ({
       ...prevData,
       category_id: selectedValues,
       categories: categories.filter((category) =>
-        selectedValues.includes(String(category.id))
+        selectedValues.includes(category.id)
       ),
     }));
   };
+  
 
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
 
