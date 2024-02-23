@@ -88,6 +88,7 @@ const AddCarouselPage = () => {
               >
                 Foto
               </label>
+              
               <input
                 type="file"
                 name="photo"
@@ -97,9 +98,10 @@ const AddCarouselPage = () => {
                 }`}
                 onChange={(e) => {
                   handleFileChange("photo", e.target.files[0]);
-                  setPhotoAlert(""); // Reset alert on every file change
+                  setPhotoAlert("");
                 }}
               />
+              <span className="text-gray-600 ml-2">Ukuran 1200x500px</span>
               {photoAlert && (
                 <p className="text-red-500 text-sm mt-1">{photoAlert}</p>
               )}
