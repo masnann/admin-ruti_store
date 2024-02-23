@@ -1,11 +1,16 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { FaEdit, FaTrash, FaInfoCircle, FaPlus } from "react-icons/fa";
+import {
+  FaEdit,
+  FaArchive,
+  FaInfoCircle,
+  FaPlus,
+  FaCheck,
+} from "react-icons/fa";
 import Sidebar from "../../components/sidebar/Sidebar";
 import { Pagination } from "../../components/pagination/Pagination";
 import getProductList from "../../hooks/product/GetAll";
-import DeleteConfirmationModal from "../../components/modals/Delete";
-import deleteProduct from "../../hooks/product/DeleteProductApi";
+import useProductStatusUpdateApi from "../../hooks/product/UpdateStatusProductApi";
 import { formatDate } from "../../utils/FormatDate";
 
 const ProductPage = () => {
@@ -14,8 +19,6 @@ const ProductPage = () => {
   const [error, setError] = useState(null);
   const [productData, setProducts] = useState([]);
   const [totalPages, setTotalPages] = useState(0);
-  const [deleteProductId, setDeleteProductId] = useState(null);
-  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
   const navigate = useNavigate();
 
@@ -68,32 +71,24 @@ const ProductPage = () => {
     navigate(`/products/detail/${id}`);
   };
 
-  const handleDelete = (id) => {
-    setDeleteProductId(id);
-    setIsDeleteModalOpen(true);
-  };
-
-  const handleDeleteConfirmation = async () => {
+  const handleStatusUpdate = async (id, newStatus) => {
     try {
       setLoading(true);
 
-      // Call the deleteProduct function to delete the product
-      await deleteProduct(deleteProductId);
-
-      // After successful deletion, fetch the updated product list
-      await fetchData();
+      await useProductStatusUpdateApi(id, newStatus);
+      window.location.reload();
 
       setLoading(false);
-      setIsDeleteModalOpen(false);
     } catch (error) {
       setError(error.message);
       setLoading(false);
-      console.error("Error deleting product:", error.message);
+      console.error("Error updating product status:", error.message);
     }
   };
 
-  const handleDeleteCancel = () => {
-    setIsDeleteModalOpen(false);
+  const handleAction = (id, currentStatus) => {
+    const newStatus = currentStatus === "Aktif" ? "Diarsipkan" : "Aktif";
+    handleStatusUpdate(id, newStatus);
   };
 
   const handleDetails = (id) => {
@@ -103,6 +98,7 @@ const ProductPage = () => {
   const handleAddProduct = () => {
     navigate("/products/create");
   };
+
   return (
     <div className="flex h-screen bg-gray-100">
       <Sidebar />
@@ -153,7 +149,9 @@ const ProductPage = () => {
                   <th className="border p-3 bg-gray-300 text-gray-700">
                     Total Ulasan
                   </th>
-                  <th className="border p-3 bg-gray-300 text-gray-700">Stok</th>
+                  <th className="border p-3 bg-gray-300 text-gray-700">
+                    Status
+                  </th>
                   <th className="border p-3 bg-gray-300 text-gray-700">
                     Dibuat Pada
                   </th>
@@ -188,7 +186,7 @@ const ProductPage = () => {
                         {product.total_reviews}
                       </td>
                       <td className="border p-3 text-center">
-                        {product.stock}
+                        {product.status}
                       </td>
                       <td className="border p-3 text-center">
                         {formatDate(product.created_at)}
@@ -220,11 +218,22 @@ const ProductPage = () => {
                         >
                           <FaInfoCircle />
                         </button>
+
                         <button
-                          className="text-red-600 hover:text-red-900"
-                          onClick={() => handleDelete(product.id)}
+                          onClick={() =>
+                            handleAction(product.id, product.status)
+                          }
+                          title={
+                            product.status === "Aktif"
+                              ? "Arsipkan"
+                              : "Aktifkan"
+                          }
                         >
-                          <FaTrash />
+                          {product.status === "Aktif" ? (
+                            <FaArchive className="mr-2" />
+                          ) : (
+                            <FaCheck className="mr-2" />
+                          )}
                         </button>
                       </td>
                     </tr>
@@ -244,11 +253,6 @@ const ProductPage = () => {
           </div>
         </div>
       </div>
-      <DeleteConfirmationModal
-        isOpen={isDeleteModalOpen}
-        onCancel={handleDeleteCancel}
-        onConfirm={handleDeleteConfirmation}
-      />
     </div>
   );
 };
